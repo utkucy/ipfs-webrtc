@@ -1,0 +1,110 @@
+ 
+ .grid-container {
+    display: grid;
+    height: 100%;
+    align-content: center;
+    grid-template-columns: 50% auto ;
+    grid-template-rows: 50% 50%;
+    grid-gap: 10px;
+    padding: 10px;
+    /* border:1px solid red; */
+  
+  }
+  
+  .grid-container > div {
+    text-align: center;
+    font-size: 30px;
+    /* border:1px solid red; */
+  }
+
+  .callout {
+    margin: 0;
+  }
+  #components-layout-demo-side .logo {
+    height: 32px;
+    margin: 16px;
+  }
+  
+  .site-layout .site-layout-background {
+  margin:0px !important; 
+  height: 100%;
+  /* background: #7F7FD5; 
+  background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  
+  background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  */
+  background-color: rgb(234, 236, 230) !important;
+
+  }
+
+  #content{
+    background-color: rgb(234, 236, 230) !important;
+
+    /* background: #7F7FD5;
+    background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  
+    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  */
+  }
+
+
+
+  
+  .sider{
+    background-color: white    !important;
+
+  }
+  .ant-layout-sider-trigger{
+
+    background-color: #f0f0f0 !important;
+
+  }
+
+  .ant-layout-sider-trigger >span{
+
+    color:black;
+
+  }
+/* 
+ .iKiMCi{
+
+  background-color:rgb(234, 236, 230) !important;
+ } */
+
+   .grid-container-screen-share {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      "screenSharingUser screenSharingUser screenSharingUser user"
+      "screenSharingUser screenSharingUser screenSharingUser user"
+      "screenSharingUser screenSharingUser screenSharingUser user";
+  }
+  .screenSharingUser { grid-area: screenSharingUser; }
+  .user {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      "."
+      "."
+      ".";
+    grid-area: user;
+  } 
+
+  /* .grid-container-screen-share {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 33.333% 33.333% 33.333%;
+    gap: 0px 0px;
+    grid-template-areas:
+      "screenSharingUser screenSharingUser screenSharingUser user"
+      "screenSharingUser screenSharingUser screenSharingUser user"
+      "screenSharingUser screenSharingUser screenSharingUser user";
+  }
+  
+  .screenSharingUser { grid-area: screenSharingUser; border: 1px solid red; }
+  
+  .user { grid-area: user; } */
+  
+  video::-webkit-media-controls {
+    display:none !important;
+  }

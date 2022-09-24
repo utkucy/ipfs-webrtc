@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+
+div.circle {
+  height: 100px;
+  width: 100px;
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 50%;
+  border-color: black;
+  animation-name: breath-animation;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+ }
+ @keyframes breath-animation {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+  /* 0% { height: 100px; width: 100px; }
+  30% { height: 400px; width: 400px; opacity: 1 }
+  40% { height: 405px; width: 405px; opacity: 0.3; }
+  100% { height: 100px; width: 100px; opacity: 0.6; } */
+ }
