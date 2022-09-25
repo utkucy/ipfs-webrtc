@@ -14,8 +14,6 @@ import moment from "moment";
 import { Cookies } from "react-cookie";
 
 import JoinRoom from "../../components/screens/dashboard/join-room/joinRoom";
-// import backgroundImg from '../../assets/images/dashboard-img.png'
-import backgroundImg from "../../assets/images/dashboard-try.png";
 import { User } from "../../models/user";
 import { store } from "store";
 import { Room } from "models/room";

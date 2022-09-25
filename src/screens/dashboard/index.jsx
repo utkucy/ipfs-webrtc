@@ -26,7 +26,6 @@ import MeetingRecordsScreen from "./meeting_records";
 import ContactsScreen from "./contacts";
 import SettingsScreen from "./settings";
 
-import logo from "../../assets/images/deneme_logo.png";
 import { store } from "store";
 
 const { Text, Title } = Typography;
@@ -50,7 +49,6 @@ class DashboardScreen extends React.Component {
 
   async componentDidMount() {
     const cookies = new Cookies();
-    console.log("coookies", cookies);
     await this.enumareteDevices();
 
     try {

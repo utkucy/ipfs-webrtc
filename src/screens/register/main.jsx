@@ -26,7 +26,6 @@ import {
   RadiusBottomrightOutlined,
 } from "@ant-design/icons";
 
-import image from "../../assets/images/light_logo_192.png";
 import { store } from "store";
 import { User } from "models/user";
 import { v4 as uuidv4, v4 } from "uuid";
@@ -211,7 +210,18 @@ class RegisterScreen extends React.Component {
   render() {
     return (
       <Container>
-        <img src={image} alt="Logo" />
+        <Title
+          level={2}
+          style={{
+            fontFamily: "Montserrat",
+            textAlign: "center",
+            marginBottom: 0,
+            color: "#002766",
+            marginBottom: 16,
+          }}
+        >
+          Web3RTC
+        </Title>
         <Form
           {...formItemLayout}
           name="register"

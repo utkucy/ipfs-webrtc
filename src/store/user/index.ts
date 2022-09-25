@@ -27,7 +27,7 @@ export default class UserStore {
       const room_ = {
         ...room,
         _id: room.room_id,
-        address: _room.address.toString(),
+        // address: _room.address.toString(),
       };
 
       const hash = await store.databaseStore.roomsDocStore.put(room_);
@@ -38,12 +38,10 @@ export default class UserStore {
 
   @action.bound
   async getRoom(_id: string) {
-    console.log("room id", _id);
     const room = await store.databaseStore.roomsDocStore.query(
       (doc: any) => doc.room_id === _id
     );
 
-    console.log("ROOM", room);
     return !!room ? room[0] : undefined;
   }
 

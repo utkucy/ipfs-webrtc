@@ -2,6 +2,7 @@ import { observable } from "mobx";
 import Identities from "orbit-db-identity-provider";
 import OrbitDB from "orbit-db";
 import { User } from "models/user";
+import { create } from "ipfs";
 
 export default class DatabaseStore {
   @observable ipfs: any;
@@ -22,8 +23,26 @@ export default class DatabaseStore {
     this.user = new User({});
   }
 
-  async connect(ipfs: any, options = {} as any) {
+  async connect(options = {} as any) {
     this.isOnline = false;
+
+    const ipfs = await create({
+      repo: "./ipfs-web3rtc-repo",
+      EXPERIMENTAL: { pubsub: true },
+      preload: { enabled: false },
+      config: {
+        Addresses: {
+          Swarm: [
+            // Use IPFS  webrtc signal server
+            "/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
+            "/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
+            // Use local signal server
+            // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
+          ],
+        },
+      },
+    });
+
     //set up orbitdb
     this.ipfs = ipfs;
 
@@ -34,6 +53,7 @@ export default class DatabaseStore {
       identity,
       directory: "./odb",
     });
+
     this.usersDocStore = await this.odb.open("users", {
       create: true,
       overwrite: true,
@@ -44,7 +64,6 @@ export default class DatabaseStore {
       },
     });
 
-    // const roomIdentity = await Identities.createIdentity({ id: "room" });
     this.roomsDocStore = await this.odb.open("rooms", {
       create: true,
       overwrite: true,
@@ -58,11 +77,29 @@ export default class DatabaseStore {
     await this.usersDocStore.load();
     await this.roomsDocStore.load();
 
-    const users = await this.usersDocStore.get("");
-    const rooms = await this.roomsDocStore.get("");
-    console.log("users", users);
-    console.log("rooms", rooms);
-
     this.isOnline = true;
+  }
+
+  async refreshRoom() {
+    const publicAccess = true;
+
+    const identity = await Identities.createIdentity({ id: "user" });
+    this.odb = await OrbitDB.createInstance(this.ipfs, {
+      identity,
+      directory: "./odb",
+    });
+
+    this.roomsDocStore = await this.odb.open("rooms", {
+      create: true,
+      overwrite: true,
+      localOnly: false,
+      type: "docstore",
+      accessController: {
+        write: publicAccess ? ["*"] : [this.odb.identity.id],
+      },
+    });
+
+    await this.roomsDocStore.load();
+    const rooms = await this.roomsDocStore.get("");
   }
 }

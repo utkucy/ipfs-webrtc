@@ -24,10 +24,7 @@ import {
 } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
 
-import logo from "../../assets/images/light_logo_192.png";
 import { store } from "store";
-//import logo from "../../assets/images/dark_logo_192.png"
-// import logo from "../../assets/images/192.png"
 
 const layout = {
   labelCol: { span: 8 },
@@ -119,12 +116,18 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <Container>
-        <img src={logo} alt="Logo" />
-        {/* <Title 
-               level={2} 
-               style={{ fontFamily: 'Montserrat', textAlign: 'center', marginBottom: 0, color: 'black', marginBottom: 30 }}>
-                  Helloooo
-            </Title> */}
+        <Title
+          level={2}
+          style={{
+            fontFamily: "Montserrat",
+            textAlign: "center",
+            marginBottom: 0,
+            color: "#002766",
+            marginBottom: 16,
+          }}
+        >
+          Web3RTC
+        </Title>
 
         <Form
           name="normal_login"

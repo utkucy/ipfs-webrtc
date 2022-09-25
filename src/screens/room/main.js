@@ -45,7 +45,6 @@ import { store } from "store/index.ts";
 let electron;
 const is_electron = isElectron();
 if (is_electron) {
-  // console.log("is electron: " , is_electron);
   electron = window.require("electron");
 }
 const { Text, Title } = Typography;

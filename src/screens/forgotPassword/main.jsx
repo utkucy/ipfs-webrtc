@@ -113,20 +113,6 @@ class ForgotPasswordScreen extends React.Component {
             remember: true,
           }}
         >
-          {/* <Form.Item>
-            <ImageView>
-              <img
-                style={{
-                  width: 250,
-                  height: 200,
-                  marginTop: 32,
-                  marginLeft: 112,
-                }}
-                src={image}
-              />
-            </ImageView>
-          </Form.Item> */}
-
           <Form.Item>
             <Text style={{ fontSize: 20 }}>Forgot your password?</Text>
           </Form.Item>

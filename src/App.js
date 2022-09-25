@@ -51,23 +51,7 @@ class App extends React.Component {
   @action.bound
   async connect() {
     try {
-      const ipfs = await create({
-        repo: "./ipfs-webrtc-repo",
-        EXPERIMENTAL: { pubsub: true },
-        preload: { enabled: false },
-        config: {
-          Addresses: {
-            Swarm: [
-              // Use IPFS  webrtc signal server
-              "/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
-              "/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
-              // Use local signal server
-              // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
-            ],
-          },
-        },
-      });
-      await store.databaseStore.connect(ipfs);
+      await store.databaseStore.connect();
     } catch (error) {
       console.log("create ipfs", error);
     }
