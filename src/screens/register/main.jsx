@@ -119,7 +119,6 @@ class RegisterScreen extends React.Component {
     let user_id;
     try {
       if (this.verifyPassword === this.password && this.name && this.surname) {
-        //console.log("pwd lenght: ", this.password.length);
         if (this.password.length < 6) {
           notification.warning({
             message: `Weak Password`,

@@ -44,14 +44,12 @@ class ForgotPasswordScreen extends React.Component {
   @action.bound
   setEmail(email) {
     this.email = email;
-    //console.log("email:", this.email);
   }
 
   @action.bound
   async forgotPassword() {
     try {
       this.emailAddress = this.email;
-      //console.log("email: ", this.emailAddress);
       const success = await this.auth.sendPasswordResetEmail(this.emailAddress);
 
       this.handleSendMessage();

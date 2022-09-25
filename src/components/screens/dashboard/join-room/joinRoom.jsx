@@ -30,7 +30,6 @@ class JoinRoom extends React.Component {
               return message.warning("Room is full");
             }
 
-            console.log("room before", room);
             room.current_participant_list.push({
               uid: this.user._id,
               displayName: this.user.displayName,
@@ -44,7 +43,6 @@ class JoinRoom extends React.Component {
               email: this.user.email,
               socketID: "",
             });
-            console.log("room after", room);
             await store.userStore.createMeeting(room);
 
             this.props.changeModalVisibility();

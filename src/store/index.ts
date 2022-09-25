@@ -17,8 +17,8 @@ export default class AppStore {
   @observable isReady = false;
 
   constructor() {
-    this.userStore = new UserStore();
     this.databaseStore = new DatabaseStore();
+    this.userStore = new UserStore();
   }
 }
 

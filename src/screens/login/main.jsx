@@ -89,7 +89,6 @@ class LoginScreen extends React.Component {
 
     try {
       const user = await store.userStore.login(this.email, this.password);
-      console.log("login", user);
       this.props.changeUser(user);
 
       const cookies = new Cookies();

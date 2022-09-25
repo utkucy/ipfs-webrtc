@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Switch, HashRouter } from "react-router-dom";
 import { observer } from "mobx-react";
-import { action, observable, computed, toJS } from "mobx";
+import { action, observable, computed, toJS, reaction } from "mobx";
 
 import LoginScreen from "./screens/login/main";
 import RegisterScreen from "./screens/register/main";
@@ -10,11 +10,14 @@ import ForgotPasswordScreen from "./screens/forgotPassword/main";
 import DashboardScreen from "./screens/dashboard/index";
 import MeetingRecordsScreen from "./screens/dashboard/meeting_records";
 import Room from "./screens/room/main";
+import { Spin } from "antd";
 
 import { User } from "./models/user";
 import { create } from "ipfs";
 import { store } from "store";
+import styled from "styled-components";
 
+@observer
 class App extends React.Component {
   @observable user;
 
@@ -30,26 +33,55 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    const ipfs = await create({
-      repo: "./ipfs-webrtc-repo",
-      EXPERIMENTAL: { pubsub: true },
-      preload: { enabled: false },
-      config: {
-        Addresses: {
-          Swarm: [
-            // Use IPFS  webrtc signal server
-            "/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
-            "/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
-            // Use local signal server
-            // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
-          ],
+    await this.connect();
+    console.log(
+      "store.databaseStore.usersDocStoree",
+      store.databaseStore.usersDocStore
+    );
+    console.log(
+      "store.databaseStore.roomsDocStore",
+      store.databaseStore.roomsDocStore
+    );
+  }
+
+  async componentWillUnmount() {
+    // await store.databaseStore.odb.disconnect();
+  }
+
+  @action.bound
+  async connect() {
+    try {
+      const ipfs = await create({
+        repo: "./ipfs-webrtc-repo",
+        EXPERIMENTAL: { pubsub: true },
+        preload: { enabled: false },
+        config: {
+          Addresses: {
+            Swarm: [
+              // Use IPFS  webrtc signal server
+              "/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
+              "/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star",
+              // Use local signal server
+              // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
+            ],
+          },
         },
-      },
-    });
-    await store.databaseStore.connect(ipfs);
+      });
+      await store.databaseStore.connect(ipfs);
+    } catch (error) {
+      console.log("create ipfs", error);
+    }
   }
 
   render() {
+    if (!store.databaseStore.isOnline) {
+      return (
+        <SpinnerContainer>
+          <Spin tip="Loading..." size="large" />
+        </SpinnerContainer>
+      );
+    }
+
     return (
       <HashRouter>
         <Switch>
@@ -88,5 +120,13 @@ class App extends React.Component {
     );
   }
 }
+
+const SpinnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default App;

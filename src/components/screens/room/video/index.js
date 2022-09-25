@@ -21,7 +21,6 @@ class Video extends Component {
       this.video.srcObject = this.props.videoStream;
     }
 
-    //console.log(toJS(this.props.videoStream.getTracks()));
     if (this.props.videoStream) {
       const videoTrack = this.props.videoStream.getVideoTracks();
       if (
@@ -32,22 +31,17 @@ class Video extends Component {
         videoTrack[0].onmute = () => {
           this.videoVisible = false;
           this.video.srcObject = undefined;
-          //console.log("video visible: ", this.videoVisible);
         };
 
         videoTrack[0].onunmute = () => {
           this.videoVisible = true;
           this.video.srcObject = this.props.videoStream;
-          //console.log("video visible: ", this.videoVisible);
         };
       }
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('1. nextProps', this.props.showMuteControls, nextProps.videoStream && nextProps.videoStream.getTracks())
-    //  console.log('1', this.props.videoType, nextProps.videoStream)
-
     // This is done only once
     if (
       nextProps.videoStream &&
@@ -68,14 +62,10 @@ class Video extends Component {
     ) {
       videoTrack[0].onmute = () => {
         this.videoVisible = false;
-        //console.log("video visible: ", this.videoVisible);
-        //  this.props.videoMuted(nextProps.videoStream)
       };
 
       videoTrack[0].onunmute = () => {
         this.videoVisible = true;
-        //console.log("video visible: ", this.videoVisible);
-        //  this.props.videoMuted(nextProps.videoStream)
       };
     }
 

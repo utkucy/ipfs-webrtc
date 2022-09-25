@@ -36,7 +36,7 @@ const { Header, Footer, Sider, Content } = Layout;
 class DashboardScreen extends React.Component {
   @observable selectedIndex = 0;
   @observable hoverIndex = 0;
-  @observable user;
+  @observable user = undefined;
 
   @observable videoDevices = [];
   @observable microphoneDevices = [];
@@ -51,8 +51,6 @@ class DashboardScreen extends React.Component {
   async componentDidMount() {
     const cookies = new Cookies();
     console.log("coookies", cookies);
-    // console.log("dashboard'da name :", cookies.get("displayName"));
-    // console.log("dashboard'da uid :", cookies.get("uid"));
     await this.enumareteDevices();
 
     try {
@@ -62,7 +60,7 @@ class DashboardScreen extends React.Component {
         this.user = new User(user);
       }
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error adding user document: ", error);
     }
   }
 

@@ -30,8 +30,6 @@ export default class UserStore {
         address: _room.address.toString(),
       };
 
-      console.log("room_", room_);
-
       const hash = await store.databaseStore.roomsDocStore.put(room_);
     } catch (error) {
       console.log("create meeting error", error);
@@ -64,10 +62,7 @@ export default class UserStore {
         address: user.address.toString(),
       };
 
-      console.log("register", store.databaseStore.usersDocStore);
-      //next we add it to our saved playlists feed
       const hash = await store.databaseStore.usersDocStore.put(user_);
-      console.log("hash", hash);
       return hash;
     } catch (error) {
       console.log("register error", error);
@@ -76,7 +71,7 @@ export default class UserStore {
 
   @action.bound
   async login(email: string, password: string) {
-    const user = store.databaseStore.usersDocStore.query(
+    const user = await store.databaseStore.usersDocStore.query(
       (doc: any) => doc.email === email && doc.password === password
     );
 
@@ -84,8 +79,8 @@ export default class UserStore {
   }
 
   @action.bound
-  getUser(_id: string) {
-    const user = store.databaseStore.usersDocStore.query(
+  async getUser(_id: string) {
+    const user = await store.databaseStore.usersDocStore.query(
       (doc: any) => doc._id === _id
     );
     return user ? user[0] : null;

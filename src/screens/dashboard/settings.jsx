@@ -108,10 +108,6 @@ class SettingsScreen extends React.Component {
         else if (md.kind === "videoinput") this.videoDevices.push(md);
         else if (md.kind === "audiooutput") this.speakerDevices.push(md);
       });
-      // console.log(mediaDevices);
-      // console.log("video", toJS(this.videoDevices));
-      // console.log("mic", toJS(this.microphoneDevices));
-      // console.log("audio", toJS(this.speakerDevices));
     } catch (error) {
       console.log(error);
     }

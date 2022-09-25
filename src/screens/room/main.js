@@ -288,13 +288,11 @@ class RoomScreen extends React.Component {
   async fetchRoomInformation() {
     try {
       const room = await store.userStore.getRoom(this.roomID);
-
+      console.log("room", room);
       if (!!room) {
-        console.log("room ınfo", room);
         this.room = new Room(room);
         this.current_participant_list = room.current_participant_list;
         this.participant_list = room.participant_list;
-        console.log("fetch room");
         console.log(this.current_participant_list);
         console.log(this.participant_list);
       } else {
@@ -607,7 +605,6 @@ class RoomScreen extends React.Component {
             });
           this.isSharing = false;
           this.shareVisible = false;
-          //console.log("bittiğinde: ", this.isSharing);
           //this.senders.find(sender => sender.track.kind === "video").replaceTrack(this.localStream.getTracks()[1]);
         };
         //})
@@ -633,7 +630,7 @@ class RoomScreen extends React.Component {
         });
       this.isSharing = true;
     } catch (e) {
-      console.log("hata", e);
+      console.log("error", e);
     }
     this.changeDesktopModalVisibility(false);
   }
@@ -772,7 +769,6 @@ class RoomScreen extends React.Component {
 
       this.peerConnections &&
         Object.values(this.peerConnections).forEach((pc) => {
-          //console.log("pcpcpcpcp")
           const senders = pc.getSenders();
           senders
             .find((sender) => sender.track.kind === "audio")

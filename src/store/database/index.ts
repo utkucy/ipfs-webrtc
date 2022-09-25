@@ -23,6 +23,7 @@ export default class DatabaseStore {
   }
 
   async connect(ipfs: any, options = {} as any) {
+    this.isOnline = false;
     //set up orbitdb
     this.ipfs = ipfs;
 
@@ -58,33 +59,10 @@ export default class DatabaseStore {
     await this.roomsDocStore.load();
 
     const users = await this.usersDocStore.get("");
+    const rooms = await this.roomsDocStore.get("");
     console.log("users", users);
-    // await this.loadUser();
+    console.log("rooms", rooms);
 
     this.isOnline = true;
-  }
-
-  async loadUser() {
-    const addToUser = (entry: any) => {
-      //add entry to this.playlsits
-
-      this.user = new User({
-        ...entry.payload.value,
-        hash: entry.hash,
-      });
-    };
-
-    this.usersDocStore.events.on("ready", (address: any, elements: any) => {
-      this.usersDocStore.all.map(addToUser);
-    });
-
-    this.usersDocStore.events.on(
-      "write",
-      (hash: any, entry: any, heads: any) => {
-        addToUser(entry);
-      }
-    );
-
-    await this.usersDocStore.load();
   }
 }
