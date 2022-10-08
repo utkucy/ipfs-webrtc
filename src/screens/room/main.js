@@ -287,13 +287,13 @@ class RoomScreen extends React.Component {
   async fetchRoomInformation() {
     try {
       const room = await store.userStore.getRoom(this.roomID);
-      console.log("room", room);
+      //console.log("room", room);
       if (!!room) {
         this.room = new Room(room);
         this.current_participant_list = room.current_participant_list;
         this.participant_list = room.participant_list;
-        console.log(this.current_participant_list);
-        console.log(this.participant_list);
+        // console.log(this.current_participant_list);
+        // console.log(this.participant_list);
       } else {
         console.log("No such document room", room);
       }

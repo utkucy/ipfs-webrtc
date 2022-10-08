@@ -93,6 +93,7 @@ export default class DatabaseStore {
       create: true,
       overwrite: true,
       localOnly: false,
+      sync: true,
       type: "docstore",
       accessController: {
         write: publicAccess ? ["*"] : [this.odb.identity.id],
@@ -100,6 +101,5 @@ export default class DatabaseStore {
     });
 
     await this.roomsDocStore.load();
-    const rooms = await this.roomsDocStore.get("");
   }
 }

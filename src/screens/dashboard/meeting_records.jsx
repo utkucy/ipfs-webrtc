@@ -79,8 +79,8 @@ class MeetingRecordsScreen extends React.Component {
   async addContact(contact) {
     try {
       const contacts = this.props.user.contacts;
-      if (contacts.find((c) => c.uid !== contact.uid)) {
-        this.props.user.contact.push(new Participant(contact));
+      if (!contacts.find((c) => c.uid === contact.uid)) {
+        this.props.user.contacts.push(new Participant(contact));
         return message.success(`${contact.displayName} is added succesfully`);
       } else {
         return message.warning(

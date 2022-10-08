@@ -34,14 +34,14 @@ class App extends React.Component {
 
   async componentDidMount() {
     await this.connect();
-    console.log(
-      "store.databaseStore.usersDocStoree",
-      store.databaseStore.usersDocStore
-    );
-    console.log(
-      "store.databaseStore.roomsDocStore",
-      store.databaseStore.roomsDocStore
-    );
+    // console.log(
+    //   "store.databaseStore.usersDocStoree",
+    //   store.databaseStore.usersDocStore
+    // );
+    // console.log(
+    //   "store.databaseStore.roomsDocStore",
+    //   store.databaseStore.roomsDocStore
+    // );
   }
 
   async componentWillUnmount() {

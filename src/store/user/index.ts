@@ -38,9 +38,9 @@ export default class UserStore {
 
   @action.bound
   async getRoom(_id: string) {
-    const room = await store.databaseStore.roomsDocStore.query(
-      (doc: any) => doc.room_id === _id
-    );
+    await store.databaseStore.refreshRoom();
+
+    const room = await store.databaseStore.roomsDocStore.get(_id);
 
     return !!room ? room[0] : undefined;
   }
