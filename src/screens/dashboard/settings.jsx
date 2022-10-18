@@ -163,7 +163,7 @@ class SettingsScreen extends React.Component {
   async updateSettings() {
     try {
       this.props.user.settings = new Settings(this.settings);
-      await store.userStore.register(this.props.user.settings);
+      await store.userStore.register(this.props.user);
 
       this.props.updateSettings(this.settings);
       this.firestore_settings.confirm_leave_meeting =
