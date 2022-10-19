@@ -52,7 +52,7 @@ class DashboardScreen extends React.Component {
     await this.enumareteDevices();
 
     try {
-      const user = await store.userStore.getUser(cookies.get("id"));
+      const user = await store.userStore.getUser(cookies.get("_id"));
 
       if (user) {
         this.user = new User(user);

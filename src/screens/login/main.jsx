@@ -90,7 +90,7 @@ class LoginScreen extends React.Component {
 
       const cookies = new Cookies();
       cookies.set("displayName", user.displayName);
-      cookies.set("id", user._id);
+      cookies.set("_id", user._id);
       cookies.set("rememberMe", this.isChecked);
       this.props.history.push("/dashboard");
     } catch (err) {

@@ -45,7 +45,7 @@ class MeetingRecordsScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.uid = this.props.user.uid;
+    this.uid = this.props.user._id;
   }
 
   @action.bound

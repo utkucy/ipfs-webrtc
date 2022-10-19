@@ -129,7 +129,7 @@ class RoomScreen extends React.Component {
     this.isItRecording = this.isItRecording.bind(this);
 
     const cookies = new Cookies();
-    this.uid = cookies.get("id");
+    this.uid = cookies.get("_id");
   }
 
   async componentDidMount() {
