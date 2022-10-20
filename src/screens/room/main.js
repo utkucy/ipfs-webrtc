@@ -948,7 +948,7 @@ class RoomScreen extends React.Component {
                     {this.selectedSpeakerSource.label}
                   </Menu.Item>
                 )}
-                {this.speakerDevices.length &&
+                {!!this.speakerDevices.length &&
                   this.speakerDevices.map((md) => (
                     <Menu.Item
                       key={md.deviceId}
@@ -959,12 +959,12 @@ class RoomScreen extends React.Component {
                   ))}
               </Menu.ItemGroup>
               <Menu.ItemGroup title="Camera Sources">
-                {this.selectedVideoSource && (
+                {!!this.selectedVideoSource && (
                   <Menu.Item style={{ color: "blue" }} key="101">
                     {this.selectedVideoSource.label}
                   </Menu.Item>
                 )}
-                {this.videoDevices.length &&
+                {!!this.videoDevices.length &&
                   this.videoDevices.map((md) => (
                     <Menu.Item
                       key={md.deviceId}

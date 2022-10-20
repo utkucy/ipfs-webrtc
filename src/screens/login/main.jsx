@@ -193,13 +193,13 @@ class LoginScreen extends React.Component {
                     Keep Me Signed In
                   </Checkbox>
                 </Form.Item>
-                <Button
+                {/* <Button
                   type="link"
                   onClick={this.forgotPwd}
                   style={{ padding: 0 }}
                 >
                   Forgot Password?
-                </Button>
+                </Button> */}
               </CheckedContainer>
             </Form.Item>
 
@@ -230,7 +230,7 @@ class LoginScreen extends React.Component {
           </Form.Item>
 
           <ORContainer>
-            <Divider>OR</Divider>
+            <Divider></Divider>
           </ORContainer>
         </Form>
       </Container>

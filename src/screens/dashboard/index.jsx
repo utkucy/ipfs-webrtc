@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { action, observable, computed, toJS } from "mobx";
 import styled from "styled-components";
-import { Button, Typography, Spin, Layout, Result } from "antd";
+import { Button, Typography, Spin, Layout, Result, message } from "antd";
 import {
   HomeOutlined,
   ClockCircleOutlined,
@@ -56,6 +56,11 @@ class DashboardScreen extends React.Component {
 
       if (user) {
         this.user = new User(user);
+      } else {
+        this.logout();
+        return message.error(
+          "Something went wrong! Please try to login again."
+        );
       }
     } catch (error) {
       console.error("Error adding user document: ", error);
