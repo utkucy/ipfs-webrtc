@@ -321,6 +321,12 @@ class RoomScreen extends React.Component {
   @action.bound
   async getLocalStream() {
     try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+        options: { mirror: true },
+      });
+
       const mediaDevices = await navigator.mediaDevices.enumerateDevices();
       await mediaDevices.forEach((md) => {
         //console.log(md)
@@ -336,11 +342,6 @@ class RoomScreen extends React.Component {
         }
       });
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-        options: { mirror: true },
-      });
       // console.log(stream);
       stream.getTracks().forEach((track) => {
         if (this.user.settings.turn_of_media_devices) {
