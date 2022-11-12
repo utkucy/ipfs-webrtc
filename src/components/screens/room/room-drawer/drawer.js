@@ -3,17 +3,10 @@ import { observer } from "mobx-react";
 import { action, observable, computed, toJS } from "mobx";
 import { Drawer, Button } from "antd";
 import styled from "styled-components";
-// import Messages from "../../../../components/screens/room/chat/messages.js"
+import Messages from "../../../../components/screens/room/chat/messages.js";
 
 @observer
 class DrawerComponent extends React.Component {
-  @observable visible = false;
-
-  @action.bound
-  changeModalVisibility() {
-    this.visible = !this.visible;
-  }
-
   render() {
     return (
       <Drawer
@@ -25,7 +18,7 @@ class DrawerComponent extends React.Component {
         mask={false}
         width="25%"
       >
-        {/* <Messages room_id={this.props.room_id} user={this.props.user} /> */}
+        <Messages room_id={this.props.room_id} user={this.props.user} />
         <div></div>
       </Drawer>
     );
