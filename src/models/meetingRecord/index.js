@@ -8,6 +8,7 @@ export class MeetingRecord {
   @observable finishedAt;
   @observable date;
   @observable participant_list = [];
+  @observable records = [];
 
   constructor(data = {}) {
     this.host_displayName = data.host_displayName;
@@ -20,6 +21,7 @@ export class MeetingRecord {
     this.participant_list = data.participant_list.map(
       (p) => new Participant(p)
     );
+    this.records = !!data.records ? data.records.map((r) => new Record(r)) : [];
   }
 }
 
@@ -34,5 +36,15 @@ export class Participant {
     this.uid = data.uid;
     this.email = data.email;
     this.socketID = data.socketID;
+  }
+}
+
+export class Record {
+  @observable name;
+  @observable cid;
+
+  constructor(data = {}) {
+    this.name = data.name;
+    this.cid = data.cid;
   }
 }

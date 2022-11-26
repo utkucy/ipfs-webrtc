@@ -82,6 +82,7 @@ class RoomScreen extends React.Component {
   @observable is_microphone_open = true;
   @observable recordModalVisible = false;
   @observable isRecording = false;
+  @observable records = [];
   @observable shareVisible = false;
   @observable isSharing = false;
 
@@ -498,6 +499,7 @@ class RoomScreen extends React.Component {
       return;
     }
 
+    console.log("RECORD IDS", this.records);
     try {
       await this.fetchRoomInformation();
       this.user.past_meetings.push({
@@ -506,6 +508,7 @@ class RoomScreen extends React.Component {
         createdAt: this.room.createdAt,
         finishedAt: moment().format(),
         participant_list: this.participant_list,
+        records: this.records,
       });
 
       await store.userStore.register(this.user);
@@ -1115,6 +1118,8 @@ class RoomScreen extends React.Component {
               isItRecording={this.isItRecording}
               isRecording={this.isRecording}
               remoteStreams={this.remoteStreams}
+              roomId={this.roomID}
+              records={this.records}
             />
 
             <div

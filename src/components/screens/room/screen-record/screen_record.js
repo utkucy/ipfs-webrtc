@@ -1,10 +1,12 @@
 import React from "react";
 import RecordRTC, { MediaStreamRecorder } from "recordrtc";
-import { Typography, Modal, notification } from "antd";
+import { Typography, Modal, notification, Spin } from "antd";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { action, observable, computed, toJS } from "mobx";
 import Video from "../../room/video/index";
+import minimist from "minimist";
+import { Web3Storage, getFilesFromPath } from "web3.storage";
 
 const { Text } = Typography;
 let recorder;
@@ -12,6 +14,8 @@ var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 @observer
 class ScreenRecording extends React.Component {
+  TOKEN =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU4MjFENzAyOGVBODBlNzEwQjgyZTE0MjMxOGU3OGEzY0M1OGJFY0QiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjgzNDI4ODQwNjQsIm5hbWUiOiJ3ZWIzcnRjIn0.h5MIRY6GrWQWht4t6AyewqoER0DCURRQUpdb9WAEeAc";
   @observable recordedVideoUrl = null;
   @observable isOpenVideoModal = false;
   @observable stream = null;
@@ -24,6 +28,8 @@ class ScreenRecording extends React.Component {
   @observable recordPreview;
   @observable desktopSources;
   @observable remoteAudioTracks = [];
+
+  @observable isRecodUploading = false;
 
   constructor(props) {
     super(props);
@@ -288,7 +294,7 @@ class ScreenRecording extends React.Component {
   }
 
   @action.bound
-  downloadScreenRecordVideo() {
+  async downloadScreenRecordVideo() {
     let recorderBlob = this.recordPreview;
     if (!recorderBlob) {
       return;
@@ -311,13 +317,26 @@ class ScreenRecording extends React.Component {
       //    //recorderType: MediaStreamRecorder
       // });
 
-      var file = new File(
-        [blob],
-        "ScreenRecord" + this.getRandomString() + ".webm",
-        {
-          type: "video/webm",
-        }
-      );
+      const fileName = `${this.props.roomId}-meeting-record.webm`;
+
+      var file = new File([blob], fileName, {
+        type: "video/webm",
+      });
+
+      try {
+        this.isRecodUploading = true;
+        const storage = new Web3Storage({ token: this.TOKEN });
+        const cid = await storage.put([file]);
+
+        this.props.records.push({
+          name: fileName,
+          cid: cid,
+        });
+      } catch (error) {
+        console.log("error web3stor", error);
+      } finally {
+        this.isRecodUploading = false;
+      }
 
       RecordRTC.invokeSaveAsDialog(file);
     }
@@ -362,8 +381,34 @@ class ScreenRecording extends React.Component {
   }
 
   render() {
+    if (this.isRecodUploading) {
+      return (
+        <RecordLoader>
+          <Spin
+            tip="Your record file is uploading to web3.storage..."
+            size="large"
+          />
+        </RecordLoader>
+      );
+    }
     return <div></div>;
   }
 }
+
+const RecordLoader = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.65;
+  z-index: 9999;
+`;
 
 export default ScreenRecording;

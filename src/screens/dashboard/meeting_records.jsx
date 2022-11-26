@@ -68,7 +68,6 @@ class MeetingRecordsScreen extends React.Component {
       this.meeting_records = records.sort((a, b) => {
         return moment(b.createdAt).diff(a.createdAt);
       });
-      //console.log(toJS(this.meeting_records))
     } catch (error) {
       console.log(error);
     }
@@ -92,6 +91,62 @@ class MeetingRecordsScreen extends React.Component {
     }
   }
 
+  getRecordHref = (cid) => {
+    return `https://${cid}.ipfs.w3s.link/`;
+  };
+
+  @computed
+  get columns() {
+    return [
+      {
+        title: "Host",
+        dataIndex: "host_displayName",
+        key: "host_displayName",
+      },
+      {
+        title: "Date",
+        dataIndex: "date",
+        key: "date",
+      },
+      {
+        title: "Records",
+        dataIndex: "records",
+        key: "records",
+        render: (records) =>
+          !!records.length ? (
+            <RecordsContainer>
+              {records.map((record, index) => (
+                <Tag color={"cyan"} key={record.cid}>
+                  <a
+                    href={this.getRecordHref(record.cid)}
+                    target="_blank"
+                    style={{ color: "inherit" }}
+                  >
+                    {`Record${index + 1}`}
+                  </a>
+                </Tag>
+              ))}
+            </RecordsContainer>
+          ) : (
+            <div>No records avaiable</div>
+          ),
+      },
+      {
+        title: "Participants",
+        dataIndex: "participants",
+        key: "participants",
+        render: (text, record) => (
+          <Button
+            onClick={(event) => this.showParticipantModal(record)}
+            type="link"
+          >
+            See Participants
+          </Button>
+        ),
+      },
+    ];
+  }
+
   render() {
     if (!this.is_fetch_complete) {
       return (
@@ -110,33 +165,7 @@ class MeetingRecordsScreen extends React.Component {
           </Text>
         </TitleContainer>
         <TableContainer>
-          <Table
-            dataSource={this.meeting_records}
-            style={{ width: "100%" }}
-            pagination={{ pageSize: 10 }}
-            bordered={true}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => this.showParticipantModal(record, rowIndex),
-              };
-            }}
-          >
-            <Column
-              title="Host"
-              dataIndex="host_displayName"
-              key="host_displayName"
-            />
-            {/* <Column title="Start" dataIndex="createdAt" key="createdAt" />
-            <Column title="End" dataIndex="finishedAt" key="finishedAt" /> */}
-            <Column title="Date" dataIndex="date" key="date" />
-            <Column
-              title="Participants"
-              key="participants"
-              render={(text, record) => (
-                <Button type="link">See Participants</Button>
-              )}
-            />
-          </Table>
+          <Table columns={this.columns} dataSource={this.meeting_records} />
           {this.record && (
             <Drawer
               title="Participant List"
@@ -210,10 +239,16 @@ const TitleContainer = styled.div`
 
 const TableContainer = styled.div`
   width: 100%;
-  display: flex;
+  display: block;
   margin-top: 40px;
   margin-bottom: 40px;
   overflow: auto;
+`;
+
+const RecordsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 export default MeetingRecordsScreen;
