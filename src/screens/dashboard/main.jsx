@@ -122,6 +122,7 @@ class DashboardScreen extends React.Component {
                 fontFamily: "Montserrat",
                 color: "#043d75",
               }}
+              ellipsis={{ tooltip: this.user.displayName }}
             >
               Hi, {this.user.displayName}!
             </Text>
@@ -237,13 +238,14 @@ const NameContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  overflow: hidden;
 `;
 
 const DateContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 0 0 250px !important;
   align-items: flex-end;
   justify-content: center;
 `;

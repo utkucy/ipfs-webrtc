@@ -2,7 +2,15 @@ import React from "react";
 import { observer } from "mobx-react";
 import { action, observable, computed, toJS } from "mobx";
 import styled from "styled-components";
-import { Button, Typography, Spin, Layout, Result, message } from "antd";
+import {
+  Button,
+  Typography,
+  Spin,
+  Layout,
+  Result,
+  message,
+  notification,
+} from "antd";
 import {
   HomeOutlined,
   ClockCircleOutlined,
@@ -27,6 +35,7 @@ import ContactsScreen from "./contacts";
 import SettingsScreen from "./settings";
 
 import { store } from "store";
+import { Settings } from "models/settings";
 
 const { Text, Title } = Typography;
 const { Header, Footer, Sider, Content } = Layout;
@@ -51,6 +60,65 @@ class DashboardScreen extends React.Component {
     const cookies = new Cookies();
     await this.enumareteDevices();
 
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", async () => {
+        const id = cookies.get("_id");
+        if (id) {
+          cookies.remove("displayName");
+          cookies.remove("_id");
+          cookies.remove("rememberMe");
+        }
+
+        window.ethereum
+          .request({ method: "eth_requestAccounts" })
+          .then(async (addressArray) => {
+            // Return the address of the wallet
+            const address = addressArray[0];
+
+            let user = await store.userStore.getUser(address);
+            if (!user) {
+              const _user = new User({
+                _id: address,
+                displayName: `Wallet User: ${address}`,
+                email: "Wallet User",
+                password: address,
+                settings: new Settings({
+                  confirm_leave_meeting: true,
+                  copy_invite_link: true,
+                  show_meeting_duration: true,
+                  turn_of_media_devices: true,
+                }),
+              });
+
+              try {
+                const hash = await store.userStore.register(_user);
+                if (!hash)
+                  return notification.error({
+                    message: `Notification`,
+                    description: "Register failed",
+                    placement: "topRight",
+                    duration: 2.5,
+                    style: { borderRadius: 8 },
+                  });
+                user = _user;
+              } catch (error) {
+                console.error("Error adding document: ", error);
+              }
+
+              notification.success({
+                message: `Notification`,
+                description: "Succesfully registered",
+                placement: "topRight",
+                duration: 2.5,
+                style: { borderRadius: 8 },
+              });
+            }
+
+            this.props.history.push("/");
+          });
+      });
+    }
+
     try {
       const user = await store.userStore.getUser(cookies.get("_id"));
 
@@ -71,7 +139,7 @@ class DashboardScreen extends React.Component {
   logout() {
     const cookies = new Cookies();
     cookies.remove("displayName");
-    cookies.remove("uid");
+    cookies.remove("_id");
     cookies.remove("rememberMe");
     this.props.history.push("/");
   }

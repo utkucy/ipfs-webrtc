@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { action, observable, computed } from "mobx";
+import { action, observable, computed, reaction } from "mobx";
 import styled from "styled-components";
 import {
   Form,
@@ -12,6 +12,7 @@ import {
   Spin,
   notification,
   message,
+  Avatar,
 } from "antd";
 import {
   UserOutlined,
@@ -25,6 +26,10 @@ import {
 import { Cookies } from "react-cookie";
 
 import { store } from "store";
+import { User } from "models/user";
+import { Settings } from "models/settings";
+
+import MetamaskLogo from "../../assets/images/metamask.png";
 
 const layout = {
   labelCol: { span: 8 },
@@ -44,8 +49,25 @@ class LoginScreen extends React.Component {
   @observable hasAccount;
   @observable isChecked = true;
 
-  componentDidMount() {
+  async componentDidMount() {
     const cookies = new Cookies();
+    window.ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then(async (addressArray) => {
+        // Return the address of the wallet
+        const address = addressArray[0];
+
+        const user = await store.userStore.getUser(address);
+        if (user && cookies.get("_id") === user._id) {
+          this.props.changeUser(user);
+
+          const cookies = new Cookies();
+          cookies.set("displayName", user.displayName);
+          cookies.set("_id", user._id);
+          cookies.set("rememberMe", this.isChecked);
+          this.props.history.push("/dashboard");
+        }
+      });
     if (
       cookies.get("_id") &&
       cookies.get("displayName") &&
@@ -111,6 +133,74 @@ class LoginScreen extends React.Component {
   @action.bound
   register() {
     this.props.history.push("/register");
+  }
+
+  @action.bound
+  connectToWallet() {
+    if (window.ethereum) {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then(async (addressArray) => {
+          // Return the address of the wallet
+          console.log("address", addressArray);
+          const address = addressArray[0];
+
+          let user = await store.userStore.getUser(address);
+          if (!user) {
+            const _user = new User({
+              _id: address,
+              displayName: `Wallet User: ${address}`,
+              email: "Wallet User",
+              password: address,
+              settings: new Settings({
+                confirm_leave_meeting: true,
+                copy_invite_link: true,
+                show_meeting_duration: true,
+                turn_of_media_devices: true,
+              }),
+            });
+
+            try {
+              const hash = await store.userStore.register(_user);
+              if (!hash)
+                return notification.error({
+                  message: `Notification`,
+                  description: "Register failed",
+                  placement: "topRight",
+                  duration: 2.5,
+                  style: { borderRadius: 8 },
+                });
+              user = _user;
+            } catch (error) {
+              console.error("Error adding document: ", error);
+            }
+
+            notification.success({
+              message: `Notification`,
+              description: "Succesfully registered",
+              placement: "topRight",
+              duration: 2.5,
+              style: { borderRadius: 8 },
+            });
+          }
+
+          this.props.changeUser(user);
+
+          const cookies = new Cookies();
+          cookies.set("displayName", user.displayName);
+          cookies.set("_id", user._id);
+          cookies.set("rememberMe", this.isChecked);
+          this.props.history.push("/dashboard");
+        });
+    } else {
+      notification.error({
+        message: `Notification`,
+        description: "Rinstall metamask extension!!",
+        placement: "topRight",
+        duration: 2.5,
+        style: { borderRadius: 8 },
+      });
+    }
   }
 
   render() {
@@ -230,8 +320,12 @@ class LoginScreen extends React.Component {
           </Form.Item>
 
           <ORContainer>
-            <Divider></Divider>
+            <Divider>OR</Divider>
           </ORContainer>
+          <Button type="default" onClick={this.connectToWallet} block>
+            <Avatar style={{ marginRight: 8 }} size={16} src={MetamaskLogo} />
+            Connect with Metamask
+          </Button>
         </Form>
       </Container>
     );
