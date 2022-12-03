@@ -67,55 +67,59 @@ class DashboardScreen extends React.Component {
           cookies.remove("displayName");
           cookies.remove("_id");
           cookies.remove("rememberMe");
+          if (this.user.email === "Wallet User")
+            cookies.set("accountChanged", true);
         }
 
-        window.ethereum
-          .request({ method: "eth_requestAccounts" })
-          .then(async (addressArray) => {
-            // Return the address of the wallet
-            const address = addressArray[0];
+        if (this.user.email === "Wallet User") {
+          window.ethereum
+            .request({ method: "eth_requestAccounts" })
+            .then(async (addressArray) => {
+              // Return the address of the wallet
+              const address = addressArray[0];
 
-            let user = await store.userStore.getUser(address);
-            if (!user) {
-              const _user = new User({
-                _id: address,
-                displayName: `Wallet User: ${address}`,
-                email: "Wallet User",
-                password: address,
-                settings: new Settings({
-                  confirm_leave_meeting: true,
-                  copy_invite_link: true,
-                  show_meeting_duration: true,
-                  turn_of_media_devices: true,
-                }),
-              });
+              let user = await store.userStore.getUser(address);
+              if (!user) {
+                const _user = new User({
+                  _id: address,
+                  displayName: `Wallet User: ${address}`,
+                  email: "Wallet User",
+                  password: address,
+                  settings: new Settings({
+                    confirm_leave_meeting: true,
+                    copy_invite_link: true,
+                    show_meeting_duration: true,
+                    turn_of_media_devices: true,
+                  }),
+                });
 
-              try {
-                const hash = await store.userStore.register(_user);
-                if (!hash)
-                  return notification.error({
-                    message: `Notification`,
-                    description: "Register failed",
-                    placement: "topRight",
-                    duration: 2.5,
-                    style: { borderRadius: 8 },
-                  });
-                user = _user;
-              } catch (error) {
-                console.error("Error adding document: ", error);
+                try {
+                  const hash = await store.userStore.register(_user);
+                  if (!hash)
+                    return notification.error({
+                      message: `Notification`,
+                      description: "Register failed",
+                      placement: "topRight",
+                      duration: 2.5,
+                      style: { borderRadius: 8 },
+                    });
+                  user = _user;
+                } catch (error) {
+                  console.error("Error adding document: ", error);
+                }
+
+                notification.success({
+                  message: `Notification`,
+                  description: "Succesfully registered",
+                  placement: "topRight",
+                  duration: 2.5,
+                  style: { borderRadius: 8 },
+                });
               }
 
-              notification.success({
-                message: `Notification`,
-                description: "Succesfully registered",
-                placement: "topRight",
-                duration: 2.5,
-                style: { borderRadius: 8 },
-              });
-            }
-
-            this.props.history.push("/");
-          });
+              this.props.history.push("/");
+            });
+        }
       });
     }
 

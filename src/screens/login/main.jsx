@@ -51,23 +51,28 @@ class LoginScreen extends React.Component {
 
   async componentDidMount() {
     const cookies = new Cookies();
-    window.ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then(async (addressArray) => {
-        // Return the address of the wallet
-        const address = addressArray[0];
+    const isWalletAccountChanged = cookies.get("accountChanged");
+    if (isWalletAccountChanged === "true") {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then(async (addressArray) => {
+          // Return the address of the wallet
+          const address = addressArray[0];
 
-        const user = await store.userStore.getUser(address);
-        if (user && cookies.get("_id") === user._id) {
-          this.props.changeUser(user);
+          const user = await store.userStore.getUser(address);
+          if (user && cookies.get("_id") === user._id) {
+            this.props.changeUser(user);
 
-          const cookies = new Cookies();
-          cookies.set("displayName", user.displayName);
-          cookies.set("_id", user._id);
-          cookies.set("rememberMe", this.isChecked);
-          this.props.history.push("/dashboard");
-        }
-      });
+            const cookies = new Cookies();
+            cookies.set("displayName", user.displayName);
+            cookies.set("_id", user._id);
+            cookies.set("rememberMe", this.isChecked);
+            cookies.remove("accountChanged");
+            this.props.history.push("/dashboard");
+          }
+        });
+    }
+
     if (
       cookies.get("_id") &&
       cookies.get("displayName") &&

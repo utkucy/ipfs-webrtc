@@ -81,7 +81,6 @@ export default class UserStore {
     const user = await store.databaseStore.usersDocStore.query(
       (doc: any) => doc._id === _id
     );
-    console.log("USER", user);
     return user ? user[0] : null;
   }
 
