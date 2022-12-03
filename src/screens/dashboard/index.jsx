@@ -117,6 +117,7 @@ class DashboardScreen extends React.Component {
                 });
               }
 
+              cookies.set("_id", address);
               this.props.history.push("/");
             });
         }
