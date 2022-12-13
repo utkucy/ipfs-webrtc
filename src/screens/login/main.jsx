@@ -30,6 +30,7 @@ import { User } from "models/user";
 import { Settings } from "models/settings";
 
 import MetamaskLogo from "../../assets/images/metamask.png";
+import { isElectron } from "utils";
 
 const layout = {
   labelCol: { span: 8 },
@@ -39,6 +40,8 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 const { Text, Link, Title } = Typography;
+
+const is_electron = isElectron();
 
 @observer
 class LoginScreen extends React.Component {
@@ -107,6 +110,11 @@ class LoginScreen extends React.Component {
     this.passwordError = "";
   }
 
+  @computed
+  get isElectron() {
+    return !!is_electron;
+  }
+
   @action.bound
   async handleLogin() {
     this.clearErrors();
@@ -147,7 +155,6 @@ class LoginScreen extends React.Component {
         .request({ method: "eth_requestAccounts" })
         .then(async (addressArray) => {
           // Return the address of the wallet
-          console.log("address", addressArray);
           const address = addressArray[0];
 
           let user = await store.userStore.getUser(address);
@@ -324,13 +331,21 @@ class LoginScreen extends React.Component {
             </Form.Item>
           </Form.Item>
 
-          <ORContainer>
-            <Divider>OR</Divider>
-          </ORContainer>
-          <Button type="default" onClick={this.connectToWallet} block>
-            <Avatar style={{ marginRight: 8 }} size={16} src={MetamaskLogo} />
-            Connect with Metamask
-          </Button>
+          {!this.isElectron && (
+            <>
+              <ORContainer>
+                <Divider>OR</Divider>
+              </ORContainer>
+              <Button type="default" onClick={this.connectToWallet} block>
+                <Avatar
+                  style={{ marginRight: 8 }}
+                  size={16}
+                  src={MetamaskLogo}
+                />
+                Connect with Metamask
+              </Button>
+            </>
+          )}
         </Form>
       </Container>
     );

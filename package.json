@@ -1,7 +1,11 @@
 {
   "name": "ipfs-webrtc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
+  "main": "electron/main.js",
+  "homepage": "./",
+  "author": "Web3RTC Team",
+  "description": "A Decentralized Video Chat App",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
@@ -32,10 +36,14 @@
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
+    "fs": "^0.0.1-security",
     "fs-extra": "^10.0.0",
     "generate-password": "^1.7.0",
     "html-webpack-plugin": "^5.5.0",
@@ -48,6 +56,7 @@
     "mini-css-extract-plugin": "^2.4.5",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
+    "nan": "^2.17.0",
     "orbit-db": "^0.28.6",
     "orbit-db-access-controllers": "^0.3.2",
     "orbit-db-cache": "~0.3.0",
@@ -105,9 +114,12 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
+    "dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron-forge start\"",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "package": "node scripts/build.js && electron-forge package",
+    "make": "node scripts/build.js && electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -120,7 +132,8 @@
     }
   },
   "resolutions": {
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "nan": "github:jkleinsc/nan#remove_accessor_signature"
   },
   "browserslist": {
     "production": [
@@ -203,14 +216,21 @@
     "resetMocks": true
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-squirrel": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/styled-components": "^5.1.26",
     "@types/uuid": "^8.3.4",
     "browserify-zlib": "^0.2.0",
+    "concurrently": "^7.6.0",
     "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",
     "crypto-browserify": "^3.12.0",
     "domain-browser": "^4.22.0",
+    "electron": "^22.0.0",
     "events": "^3.3.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
@@ -222,6 +242,40 @@
     "tty-browserify": "^0.0.1",
     "url": "^0.11.0",
     "util": "^0.12.4",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "wait-on": "^6.0.1"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "name": "Web3RTC",
+        "icon": "./public/logo512.icns"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "authors": "Web3RTC Team",
+            "iconUrl": "https://www.web3rtc.com/favicon.ico",
+            "exe": "Web3RTC.exe",
+            "name": "Web3RTC"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

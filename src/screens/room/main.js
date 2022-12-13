@@ -43,9 +43,17 @@ import ScreenRecording from "../../components/screens/room/screen-record/screen_
 import { store } from "store/index.ts";
 
 let electron;
+let desktop_capturer;
 const is_electron = isElectron();
 if (is_electron) {
   electron = window.require("electron");
+  const { ipcRenderer } = window.require("electron");
+  desktop_capturer = {
+    getSources: (opts) =>
+      ipcRenderer.invoke("DESKTOP_CAPTURER_GET_SOURCES", {
+        types: ["window", "screen"],
+      }),
+  };
 }
 const { Text, Title } = Typography;
 const { Header, Content, Sider, Footer } = Layout;
@@ -499,7 +507,6 @@ class RoomScreen extends React.Component {
       return;
     }
 
-    console.log("RECORD IDS", this.records);
     try {
       await this.fetchRoomInformation();
       this.user.past_meetings.push({
@@ -582,11 +589,17 @@ class RoomScreen extends React.Component {
   @action.bound
   async shareScreen() {
     if (is_electron) {
-      const sources = await electron.desktopCapturer.getSources({
-        types: ["window", "screen"],
-      });
-      this.desktopSources = sources;
-      await this.setScreens();
+      try {
+        // const sources = await electron.desktopCapturer.getSources({
+        //   types: ["window", "screen"],
+        // });
+        const sources = await desktop_capturer.getSources();
+
+        this.desktopSources = sources;
+        await this.setScreens();
+      } catch (error) {
+        console.log("is electron share screen error", error);
+      }
     } else {
       try {
         const stream = await navigator.mediaDevices.getDisplayMedia({
