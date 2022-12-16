@@ -1,14 +1,30 @@
-name: Build Electron App for Windows
+name: Build Electron App for Windows and macOS
 
 on:
   push:
     branches: [master]
 
 jobs:
-  build:
+    build_on_mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 14
+    - name: install dependencies
+      run: yarn install
+    - name: build
+      run: yarn make
+
+  build_on_win:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-      - run: yarn install
-      - run: yarn make -- -w
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 14
+    - name: install dependencies
+      run: yarn install
+    - name: build
+      run: yarn make
