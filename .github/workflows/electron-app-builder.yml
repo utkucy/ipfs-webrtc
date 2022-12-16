@@ -11,4 +11,4 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
       - run: yarn install
-      - run: npm run make -- -w
+      - run: yarn make -- -w
