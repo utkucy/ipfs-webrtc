@@ -37,6 +37,7 @@ class App extends React.Component {
   }
 
   async componentWillUnmount() {
+    console.log("app.render");
     // await store.databaseStore.odb.disconnect();
   }
 
