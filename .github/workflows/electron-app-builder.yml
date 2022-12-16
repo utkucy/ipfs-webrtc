@@ -5,9 +5,9 @@ on:
     branches: [master]
 
 jobs:
-    build_on_mac:
-    runs-on: macos-latest
-    steps:
+  build_on_mac:
+  runs-on: macos-latest
+  steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@master
       with:
@@ -20,11 +20,11 @@ jobs:
   build_on_win:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-        node-version: 14
-    - name: install dependencies
-      run: yarn install
-    - name: build
-      run: yarn make
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 14
+      - name: install dependencies
+        run: yarn install
+      - name: build
+        run: yarn make
