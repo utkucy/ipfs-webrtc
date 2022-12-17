@@ -7,6 +7,8 @@ on:
 jobs:
   build_on_mac:
     runs-on: macos-latest
+    env:
+      CI: false
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@master
@@ -19,6 +21,8 @@ jobs:
 
   build_on_win:
     runs-on: windows-latest
+    env:
+      CI: false
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@master
