@@ -16,14 +16,6 @@ jobs:
           node-version: 16.17.0
       - name: install dependencies
         run: yarn install
-      - uses: actions/setup-node@master
-        with:
-          node-version: 10.24.1
-      - name: install libp2p
-        run: yarn add libp2p
-      - uses: actions/setup-node@master
-        with:
-          node-version: 16.17.0
       - name: build
         run: yarn make
 
@@ -38,13 +30,5 @@ jobs:
           node-version: 16.17.0
       - name: install dependencies
         run: yarn install
-      - uses: actions/setup-node@master
-        with:
-          node-version: 10.24.1
-      - name: install libp2p
-        run: yarn add libp2p
-      - uses: actions/setup-node@master
-        with:
-          node-version: 16.17.0
       - name: build
         run: yarn make
