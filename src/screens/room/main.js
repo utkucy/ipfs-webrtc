@@ -123,7 +123,7 @@ class RoomScreen extends React.Component {
   @observable participant_count = 0;
   @observable has_cam = false;
 
-  @observable is_fetch_completed = false;
+  @observable isLoading = true;
   @observable time = "";
   @observable timeInterval;
 
@@ -367,7 +367,7 @@ class RoomScreen extends React.Component {
       });
       window.localStream = stream;
       this.localStream = stream;
-      this.is_fetch_completed = true;
+      this.isLoading = false;
       this.whoisOnline();
     } catch (error) {
       console.log(error);
@@ -508,6 +508,14 @@ class RoomScreen extends React.Component {
     }
 
     try {
+      this.isLoading = true;
+
+      this.socket.close();
+      this.stopTracks(this.localStream);
+      this.remoteStreams.forEach((rVideo) => this.stopTracks(rVideo.stream));
+      this.peerConnections &&
+        Object.values(this.peerConnections).forEach((pc) => pc.close());
+
       await this.fetchRoomInformation();
       this.user.past_meetings.push({
         meeting_id: this.room.room_id,
@@ -531,11 +539,7 @@ class RoomScreen extends React.Component {
     } catch (error) {
       console.log("Error leaving room", error);
     }
-    this.socket.close();
-    this.stopTracks(this.localStream);
-    this.remoteStreams.forEach((rVideo) => this.stopTracks(rVideo.stream));
-    this.peerConnections &&
-      Object.values(this.peerConnections).forEach((pc) => pc.close());
+    this.isLoading = false;
     this.props.history.push("/dashboard");
   }
 
@@ -864,7 +868,7 @@ class RoomScreen extends React.Component {
   };
 
   render() {
-    if (!this.is_fetch_completed) {
+    if (this.isLoading) {
       return (
         <SpinnerContainer>
           <Spin tip="Loading..." size="large" />
