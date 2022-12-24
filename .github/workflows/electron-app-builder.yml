@@ -14,6 +14,10 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16.17.0
+      - name: set openssl
+        run: ln -s /usr/local/Cellar/openssl/[version]/include/openssl
+      - name: set openssl2
+        run: ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/
       - name: install dependencies
         run: yarn install --ignore-engines
       - name: build
@@ -28,6 +32,10 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16.17.0
+      - name: set openssl
+        run: mklink /D "C:\usr\local\Cellar\openssl[version]\include\openssl" "C:\usr\local\Cellar\openssl[version]\include\openssl"
+      - name: set openssl2
+        run: mklink /D "C:\usr\local\lib\libssl.1.0.0.dylib" "C:\usr\local\opt\openssl\lib\libssl.1.0.0.dylib"
       - name: install dependencies
         run: yarn install --ignore-engines
       - name: build
