@@ -102,6 +102,11 @@ class RoomScreen extends React.Component {
       {
         url: "stun:stun.l.google.com:19302",
       },
+      {
+        urls: "turn:54.204.242.200:3478",
+        credential: "guest",
+        username: "somepassword",
+      },
     ],
   };
 
@@ -336,6 +341,8 @@ class RoomScreen extends React.Component {
         options: { mirror: true },
       });
 
+      console.log("stream", stream);
+
       const mediaDevices = await navigator.mediaDevices.enumerateDevices();
       await mediaDevices.forEach((md) => {
         //console.log(md)
@@ -353,6 +360,7 @@ class RoomScreen extends React.Component {
 
       // console.log(stream);
       stream.getTracks().forEach((track) => {
+        console.log("track", track);
         if (this.user.settings.turn_of_media_devices) {
           if (track.kind === "video") {
             track.enabled = false;
@@ -714,6 +722,7 @@ class RoomScreen extends React.Component {
   changeMicStatus() {
     this.localStream.getTracks().forEach((track) => {
       if (track.kind === "audio") track.enabled = !track.enabled;
+      console.log("mic", track);
     });
     this.is_microphone_open = !this.is_microphone_open;
   }
@@ -786,6 +795,8 @@ class RoomScreen extends React.Component {
       window.localStream = stream;
       this.localStream = stream;
       //console.log(this.localStream.getTracks());
+
+      console.log("on TRACIIIIKKK", this.localStream.getAudioTracks());
 
       this.peerConnections &&
         Object.values(this.peerConnections).forEach((pc) => {

@@ -2,7 +2,7 @@ import { observable } from "mobx";
 import Identities from "orbit-db-identity-provider";
 import OrbitDB from "orbit-db";
 import { User } from "models/user";
-import { create } from "ipfs";
+import { CID, create } from "ipfs";
 
 export default class DatabaseStore {
   @observable ipfs: any;
@@ -54,6 +54,8 @@ export default class DatabaseStore {
       directory: "./odb",
     });
 
+    console.log("odb", this.odb);
+
     this.usersDocStore = await this.odb.open("users", {
       create: true,
       overwrite: true,
@@ -74,8 +76,34 @@ export default class DatabaseStore {
       },
     });
 
+    console.log("this.roomsDocStore", this.roomsDocStore);
+
     await this.usersDocStore.load();
     await this.roomsDocStore.load();
+
+    this.usersDocStore._ipfs.pin.add(
+      CID.parse(this.usersDocStore.address.root),
+      { recursive: true },
+      (err: any) => {
+        if (err) {
+          console.error("Error pinning userDocStore", err);
+        } else {
+          console.log("Pinned identity");
+        }
+      }
+    );
+
+    this.roomsDocStore._ipfs.pin.add(
+      CID.parse(this.roomsDocStore.address.root),
+      { recursive: true },
+      (err: any) => {
+        if (err) {
+          console.error("Error pinning roomDocStore", err);
+        } else {
+          console.log("Pinned identity");
+        }
+      }
+    );
 
     this.isOnline = true;
   }

@@ -52,6 +52,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
+    "jszip": "^3.10.1",
     "logplease": "^1.2.15",
     "mini-css-extract-plugin": "^2.4.5",
     "mobx": "^5.15.4",
