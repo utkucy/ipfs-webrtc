@@ -174,7 +174,9 @@ class ScreenRecording extends React.Component {
       this.camera = camera;
 
       this.recorder = RecordRTC([screen, camera], {
-        type: "video",
+        type: "canvas",
+        mimeType: "video/webm;codecs=vp9",
+        getNativeBlob: true,
       });
       this.recorder.startRecording();
       this.recorder.screen = screen;
@@ -201,7 +203,7 @@ class ScreenRecording extends React.Component {
       stream.display_id = source.display_id;
       stream.name = source.name;
 
-      if (stream.name === "Helloooo") {
+      if (stream.name === "Web3RTC") {
         this.remoteAudioTracks.forEach((audioTrack) => {
           stream.addTrack(audioTrack);
         });
@@ -267,9 +269,9 @@ class ScreenRecording extends React.Component {
     await this.stopLocalVideo(this.screen, this.camera);
     let recordedVideoUrl;
     if (this.recorder.getBlob()) {
-      this.recordPreview = this.recorder.getBlob(); //preview'dan alıp kaydediyorum
+      this.recordPreview = this.recorder.getBlob();
 
-      recordedVideoUrl = URL.createObjectURL(this.recorder.getBlob()); // kaydı objectUrl şeklinde tutmuş galiba ama neden?  -->galiba önizlemede gösterebilmek için
+      recordedVideoUrl = URL.createObjectURL(this.recorder.getBlob());
     }
 
     this.recordedVideoUrl = recordedVideoUrl;
@@ -308,17 +310,10 @@ class ScreenRecording extends React.Component {
       }
     }
     if (recorderBlob) {
-      recorderBlob.mimeType = { video: "video/webm" };
+      // recorderBlob.mimeType = { video: "video/webm" };
       var blob = recorderBlob;
 
-      // var file = new File([blob], this.getRandomString() + 'mp4', {
-      //    type: 'video',
-      //    mimeType: 'video/webm'
-      //    //recorderType: MediaStreamRecorder
-      // });
-
       const fileName = `${this.props.roomId}-meeting-record.webm`;
-
       var file = new File([blob], fileName, {
         type: "video/webm",
       });
