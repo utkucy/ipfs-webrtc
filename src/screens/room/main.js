@@ -1140,6 +1140,7 @@ class RoomScreen extends React.Component {
             <ScreenRecording
               is_electron={is_electron}
               electron={electron}
+              desktopCapturer={desktop_capturer}
               recordModalVisible={this.recordModalVisible}
               showRecordModalVisible={this.showRecordModalVisible}
               micStatus={this.is_microphone_open}

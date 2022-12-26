@@ -118,7 +118,7 @@ class ScreenRecording extends React.Component {
 
     if (this.props.is_electron) {
       try {
-        const sources = await this.props.electron.desktopCapturer.getSources({
+        const sources = await this.props.desktopCapturer.getSources({
           types: ["window", "screen"],
         });
         this.desktopSources = sources;
