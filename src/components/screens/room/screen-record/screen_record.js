@@ -93,16 +93,6 @@ class ScreenRecording extends React.Component {
       return;
     }
 
-    // let _selectedSpeakerSource
-    // const mediaDevices = await navigator.mediaDevices.enumerateDevices()
-    // mediaDevices.forEach(md => {
-    //    if (md.kind === "audiooutput" && md.deviceId === "default"){
-
-    //       _selectedSpeakerSource = md;
-    //       console.log("md: ", _selectedSpeakerSource);
-    //    }
-    // })
-
     var displaymediastreamconstraints = {
       video: {
         displaySurface: "monitor", // monitor, window, application, browser
@@ -118,9 +108,7 @@ class ScreenRecording extends React.Component {
 
     if (this.props.is_electron) {
       try {
-        const sources = await this.props.desktopCapturer.getSources({
-          types: ["window", "screen"],
-        });
+        const sources = await this.props.desktopCapturer.getSources();
         this.desktopSources = sources;
         this.setScreens();
       } catch (error) {
@@ -152,7 +140,6 @@ class ScreenRecording extends React.Component {
   captureScreen(screen) {
     try {
       this.addStreamStopListener(screen, () => {});
-      //2-burada screen?, ", screen);
       this.startScreenRecord(screen);
     } catch (error) {
       console.log("an error occured in recording2: ", error);
@@ -279,7 +266,7 @@ class ScreenRecording extends React.Component {
     this.isOpenVideoModal = true;
     this.camera = null;
 
-    this.downloadScreenRecordVideo();
+    await this.downloadScreenRecordVideo();
 
     this.recorder.screen.stop();
     this.recorder.destroy();

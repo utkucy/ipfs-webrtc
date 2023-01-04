@@ -103,10 +103,15 @@ class RoomScreen extends React.Component {
         url: "stun:stun.l.google.com:19302",
       },
       {
-        urls: "turn:54.204.242.200:3478",
-        credential: "guest",
-        username: "somepassword",
+        urls: "turn:openrelay.metered.ca:80",
+        username: "openrelayproject",
+        credentials: "openrelayproject",
       },
+      // {
+      //   urls: "turn:54.204.242.200:3478",
+      //   credential: "guest",
+      //   username: "somepassword",
+      // },
     ],
   };
 
@@ -1206,61 +1211,6 @@ class RoomScreen extends React.Component {
                   </Col>
                   <Videos remoteStreams={this.remoteStreams} />
                 </Row>
-                {/* <div class="grid-container">               
-                  <div onDoubleClick={this.doubleClick} style={{ display: 'inline-block', width:'100%', height: '100%' }} >
-                    <Video
-                      videoStyles={{ 
-                        objectFit: 'cover',
-                        height: '100%',
-                        width: '100%',
-                      }}
-                      frameStyle={{
-                        backgroundColor: '#ffffff12',
-                        // maxWidth: 120, 
-                        // maxHeight: 120,
-                        width: '100%', 
-                        height: '100%',
-                      }}
-                      showMuteControls={false}
-                      //ref={this.localVideoref} 
-                      videoStream={this.localStream}
-                      muted="true"
-                      autoPlay 
-                      /> 
-                      <Text style={{ textAlign: 'center', fontSize:'12px',}} >{this.user.displayName}</Text> 
-                  </div>
-                  <Videos remoteStreams={this.remoteStreams}/>     
-                 </div>  */}
-
-                {/* <div class="grid-container-screen-share">
-                  <div class="screenSharingUser">
-                  <Video
-                      videoStyles={{ 
-                        objectFit: 'cover',
-                        height: '100%',
-                        width: '100%',
-                      }}
-                      frameStyle={{
-                        backgroundColor: '#ffffff12',
-                        // maxWidth: 120, 
-                        // maxHeight: 120,
-                        width: '100%', 
-                        height: '100%',
-                        padding: '0 3px',
-                      }}
-                      showMuteControls={false}
-                      //ref={this.localVideoref} 
-                      videoStream={this.localStream}
-                      muted="true"
-                      autoPlay 
-                      /> 
-                  </div>
-                  <div class="user">
-                  <Videos remoteStreams={this.remoteStreams}/>     
-
-                  </div>
-                </div> */}
-
                 <br />
               </Container>
             </div>
