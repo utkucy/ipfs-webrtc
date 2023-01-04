@@ -100,13 +100,31 @@ class RoomScreen extends React.Component {
   @observable pc_config = {
     iceServers: [
       {
-        url: "stun:stun.l.google.com:19302",
+        urls: "stun:relay.metered.ca:80",
       },
       {
-        urls: "turn:openrelay.metered.ca:80",
-        username: "openrelayproject",
-        credentials: "openrelayproject",
+        urls: "turn:relay.metered.ca:80",
+        username: "6c09095bdf2837a7cf0ba812",
+        credential: "6DTZGIGLOtqPVB6q",
       },
+      {
+        urls: "turn:relay.metered.ca:443",
+        username: "6c09095bdf2837a7cf0ba812",
+        credential: "6DTZGIGLOtqPVB6q",
+      },
+      {
+        urls: "turn:relay.metered.ca:443?transport=tcp",
+        username: "6c09095bdf2837a7cf0ba812",
+        credential: "6DTZGIGLOtqPVB6q",
+      },
+      // {
+      //   url: "stun:stun.l.google.com:19302",
+      // },
+      // {
+      //   urls: "turn:openrelay.metered.ca:80",
+      //   username: "openrelayproject",
+      //   credentials: "openrelayproject",
+      // },
       // {
       //   urls: "turn:54.204.242.200:3478",
       //   credential: "guest",
