@@ -217,41 +217,36 @@ class LoginScreen extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Title
-          level={2}
-          style={{
-            fontFamily: "Montserrat",
-            textAlign: "center",
-            marginBottom: 0,
-            color: "#002766",
-            marginBottom: 16,
-          }}
-        >
+      <div
+        style={{ background: "rgb(249,250,251)" }}
+        className="flex flex-col justify-center items-center w-full h-full mobile:px-6 "
+      >
+        <div className="text-center mb-4 text-purple-900 font-custom font-bold text-3xl ">
           Web3RTC
-        </Title>
+        </div>
 
         <Form
+          layout="vertical"
           name="normal_login"
-          className="login-form"
+          className="login-form mobile:w-full w-96"
           initialValues={{
             remember: true,
           }}
-          style={{ width: 350 }}
         >
           <Form.Item style={{ marginBottom: 0 }}>
             <Form.Item
               name="email"
               rules={[{ required: true, message: "Please input your Email!" }]}
+              label="Email"
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Email"
+                // placeholder="Email"
                 autoFocus
-                required
+                // required
                 value={this.email}
                 onChange={(e) => this.setEmail(e.target.value)}
-                style={{ borderRadius: 8 }}
+                className="rounded-lg hover:border-purple-500"
               />
               <WarningContainer>
                 <Text type="danger" className="errorMsg">
@@ -262,6 +257,7 @@ class LoginScreen extends React.Component {
 
             <Form.Item
               name="password"
+              label="Password"
               rules={[
                 { required: true, message: "Please input your Password!" },
               ]}
@@ -269,11 +265,11 @@ class LoginScreen extends React.Component {
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Password"
-                required
+                // placeholder="Password"
+                // required
                 value={this.password}
                 onChange={(e) => this.setPassword(e.target.value)}
-                style={{ borderRadius: 8 }}
+                className="rounded-lg hover:border-purple-500"
               />
               <WarningContainer>
                 <Text type="danger" className="errorMsg">
@@ -291,9 +287,9 @@ class LoginScreen extends React.Component {
             >
               <CheckedContainer>
                 <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox onChange={this.rememberMe}>
+                  <StyledCheckbox onChange={this.rememberMe}>
                     Keep Me Signed In
-                  </Checkbox>
+                  </StyledCheckbox>
                 </Form.Item>
                 {/* <Button
                   type="link"
@@ -307,47 +303,51 @@ class LoginScreen extends React.Component {
 
             <Form.Item style={{ marginBottom: 10 }}>
               <ButtonContainer>
-                <Button
-                  type="primary"
+                <div
+                  // type="primary"
                   onClick={this.handleLogin}
-                  style={{ width: "100%", marginBottom: 30, borderRadius: 8 }}
+                  className="w-full mb-8 rounded-lg bg-purple-900 hover:bg-purple-800 py-2 flex justify-center items-center text-white font-bold cursor-pointer "
                 >
                   Login
-                </Button>
-
-                <RegisterContainer>
-                  <Text style={{ textAlign: "center" }}>
+                </div>
+                <div className="flex flex-wrap gap-2 justify-between items-center w-full">
+                  <Text className="text-center text-purple-900">
                     Don't have an account?
                   </Text>
                   <Button
                     type="link"
                     onClick={this.register}
-                    style={{ padding: 0 }}
+                    className="text-center text-purple-900 hover:text-purple-300 "
                   >
                     Register Now!
                   </Button>
-                </RegisterContainer>
+                </div>
               </ButtonContainer>
             </Form.Item>
           </Form.Item>
 
-          {!this.isElectron && (
+          {!this.isElectron && !store.isMobile && (
             <>
               <ORContainer>
                 <Divider>OR</Divider>
               </ORContainer>
-              <Button type="default" onClick={this.connectToWallet} block>
+              <div
+                className="w-full mb-8 rounded-lg bg-white py-2 flex justify-center items-center text-purple-500 hover:text-purple-300 border border-purple-500 hover:border-purple-300 font-bold cursor-pointer transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 150ms; "
+                onClick={this.connectToWallet}
+              >
                 <Avatar
                   style={{ marginRight: 8 }}
                   size={16}
                   src={MetamaskLogo}
                 />
                 Connect with Metamask
-              </Button>
+              </div>
             </>
           )}
         </Form>
-      </Container>
+      </div>
     );
   }
 }
@@ -396,24 +396,9 @@ const SpinnerContainer = styled.div`
   align-items: center;
 `;
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-`;
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-const RegisterContainer = styled.div`
-  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -425,6 +410,21 @@ const WarningContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`;
+
+export const StyledCheckbox = styled(Checkbox)`
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: rgb(168 85 247);
+    border-color: rgb(168 85 247);
+
+    :hover {
+      border-color: rgb(168 85 247) !important;
+    }
+  }
+
+  :hover {
+    border-color: rgb(168 85 247) !important;
+  }
 `;
 
 export default LoginScreen;

@@ -13,12 +13,14 @@ export default class AppStore {
   // STORES
   @observable userStore;
   @observable databaseStore;
+  @observable isMobile;
 
   @observable isReady = false;
 
   constructor() {
     this.databaseStore = new DatabaseStore();
     this.userStore = new UserStore();
+    this.isMobile = window.innerWidth < 768;
   }
 }
 

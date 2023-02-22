@@ -209,24 +209,18 @@ class RegisterScreen extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Title
-          level={2}
-          style={{
-            fontFamily: "Montserrat",
-            textAlign: "center",
-            marginBottom: 0,
-            color: "#002766",
-            marginBottom: 16,
-          }}
-        >
+      <div
+        style={{ background: "rgb(249,250,251)" }}
+        className="flex flex-col justify-center items-center w-full h-full mobile:px-6 "
+      >
+        <div className="text-center mb-4 text-purple-900 font-custom font-bold text-3xl ">
           Web3RTC
-        </Title>
+        </div>
         <Form
-          {...formItemLayout}
+          // {...formItemLayout}
           name="register"
-          scrollToFirstError
-          style={{ width: 450, marginRight: 100 }}
+          layout="vertical"
+          className="mobile:w-full w-96"
         >
           <Form.Item
             name="name"
@@ -336,26 +330,26 @@ class RegisterScreen extends React.Component {
             />
           </Form.Item>
 
-          <Form.Item {...tailFormItemLayout}>
-            <Button
-              type="primary"
+          <Form.Item>
+            <button
+              // type="primary"
               onClick={this.handleSignup}
-              style={{ width: "100%", marginBottom: 20, borderRadius: 8 }}
+              className="w-full mb-8 mt-3 rounded-lg bg-purple-900 hover:bg-purple-800 py-2 flex justify-center items-center text-white font-bold cursor-pointer "
               htmlType="submit"
             >
               Register
-            </Button>
+            </button>
 
             <Button
               type="link"
               onClick={this.goBack}
-              style={{ width: "100%", marginBottom: 30, borderRadius: 8 }}
+              className="text-center text-purple-900 w-full mb-4 rounded-lg hover:text-purple-300"
             >
               Back to Login
             </Button>
           </Form.Item>
         </Form>
-      </Container>
+      </div>
     );
   }
 }

@@ -49,12 +49,13 @@ export default class DatabaseStore {
     const publicAccess = true;
 
     const identity = await Identities.createIdentity({ id: "user" });
+    console.log("identiy", identity);
     this.odb = await OrbitDB.createInstance(ipfs, {
       identity,
       directory: "./odb",
     });
 
-    console.log("odb", this.odb);
+    console.log("odb", this.odb._ipfs);
 
     this.usersDocStore = await this.odb.open("users", {
       create: true,
@@ -75,8 +76,6 @@ export default class DatabaseStore {
         write: publicAccess ? ["*"] : [this.odb.identity.id],
       },
     });
-
-    console.log("this.roomsDocStore", this.roomsDocStore);
 
     await this.usersDocStore.load();
     await this.roomsDocStore.load();
