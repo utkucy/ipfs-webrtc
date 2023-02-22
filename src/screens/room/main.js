@@ -688,10 +688,8 @@ class RoomScreen extends React.Component {
 
   @action.bound
   endShare() {
-    //console.log(this.screenTrack);
     this.screenTrack.stop();
     this.screenTrack = null;
-    // this.senders.find(sender => sender.track.kind === "video").replaceTrack(this.localStream.getTracks()[1]);
     this.peerConnections &&
       Object.values(this.peerConnections).forEach((pc) => {
         const senders = pc.getSenders();
@@ -745,7 +743,6 @@ class RoomScreen extends React.Component {
   changeMicStatus() {
     this.localStream.getTracks().forEach((track) => {
       if (track.kind === "audio") track.enabled = !track.enabled;
-      console.log("mic", track);
     });
     this.is_microphone_open = !this.is_microphone_open;
   }
@@ -818,8 +815,6 @@ class RoomScreen extends React.Component {
       window.localStream = stream;
       this.localStream = stream;
       //console.log(this.localStream.getTracks());
-
-      console.log("on TRACIIIIKKK", this.localStream.getAudioTracks());
 
       this.peerConnections &&
         Object.values(this.peerConnections).forEach((pc) => {

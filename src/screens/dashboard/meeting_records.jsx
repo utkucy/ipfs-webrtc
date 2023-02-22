@@ -30,6 +30,7 @@ import { Cookies } from "react-cookie";
 import moment from "moment";
 
 import { MeetingRecord, Participant } from "../../models/meetingRecord";
+import { store } from "store";
 
 const { Text, Title } = Typography;
 const { Column, ColumnGroup } = Table;
@@ -80,6 +81,7 @@ class MeetingRecordsScreen extends React.Component {
       const contacts = this.props.user.contacts;
       if (!contacts.find((c) => c.uid === contact.uid)) {
         this.props.user.contacts.push(new Participant(contact));
+        store.userStore.register(this.props.user);
         return message.success(`${contact.displayName} is added succesfully`);
       } else {
         return message.warning(

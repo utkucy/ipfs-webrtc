@@ -57,7 +57,7 @@ class ContactsScreen extends React.Component {
       this.props.user.contacts = this.props.user.contacts.filter(
         (c) => c.uid !== contact.uid
       );
-      await store.databaseStore.register(this.props.user);
+      await store.userStore.register(this.props.user);
       this.contacts = this.props.user.contacts;
     } catch (error) {
       console.log("Error while deleting contact fields ", error);
