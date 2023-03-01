@@ -73,14 +73,15 @@ class ContactsScreen extends React.Component {
       );
     }
     return (
-      <RightContainer>
-        <TitleContainer>
+      <div className="w-full flex flex-col px-10 mobile:p-4 ">
+        <div className="w-full flex justify-start mt-32 mobile:mt-8">
           <Text
-            style={{ fontSize: 30, fontFamily: "Montserrat", color: "#043d75" }}
+            style={{ fontSize: 30, fontFamily: "Montserrat" }}
+            className="text-purple-900"
           >
             Your Contact List
           </Text>
-        </TitleContainer>
+        </div>
         {this.contacts.length ? (
           <ListContainer>
             <List
@@ -124,7 +125,7 @@ class ContactsScreen extends React.Component {
             />
           </EmptyContainer>
         )}
-      </RightContainer>
+      </div>
     );
   }
 }

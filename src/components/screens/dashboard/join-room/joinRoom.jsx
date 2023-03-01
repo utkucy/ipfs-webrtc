@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { action, observable, computed } from "mobx";
 import styled from "styled-components";
-import { Modal, Input, Row, Col, Form, message } from "antd";
+import { Modal, Input, Row, Col, Form, message, Drawer } from "antd";
 
 import { User } from "../../../../models/user";
 import { store } from "store";
@@ -78,40 +78,86 @@ class JoinRoom extends React.Component {
   render() {
     return (
       <>
-        <Modal
-          title="Room Information"
-          centered
-          okText="Join"
-          visible={this.props.isModalVisible}
-          onOk={this.onOk}
-          onCancel={this.handleCancel}
-          // style={{ height: '200px' }}
-          bodyStyle={{ paddingTop: 40, paddingBottom: 40, height: 220 }}
-          destroyOnClose={true}
-        >
-          <Form layout="vertical">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label="Room ID" required={true}>
-                  <Input
-                    // value={this.newProduct.name}
-                    onChange={this.onRoomIdChange}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item label="Password" required={true}>
-                  <Input
-                    // value={this.newProduct.description}
-                    onChange={this.onPasswordChange}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Modal>
+        {store.isMobile ? (
+          <Drawer
+            title="Room Information"
+            visible={this.props.isModalVisible}
+            onOk={this.onOk}
+            onClose={this.handleCancel}
+            destroyOnClose={true}
+            width={"100%"}
+          >
+            <div className="w-full h-full flex flex-col justify-center ">
+              <Form
+                layout="vertical"
+                className="w-full flex flex-col justify-center"
+              >
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Form.Item label="Room ID" required={true}>
+                      <Input
+                        // value={this.newProduct.name}
+                        onChange={this.onRoomIdChange}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Form.Item label="Password" required={true}>
+                      <Input
+                        // value={this.newProduct.description}
+                        onChange={this.onPasswordChange}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+
+              <div
+                onClick={this.onOk}
+                className="flex cursor-pointer justify-center items-center mt-5 w-full p-4 rounded bg-purple-700 text-purple-50"
+              >
+                Join
+              </div>
+            </div>
+          </Drawer>
+        ) : (
+          <Modal
+            title="Room Information"
+            centered
+            okText="Join"
+            visible={this.props.isModalVisible}
+            onOk={this.onOk}
+            onCancel={this.handleCancel}
+            // style={{ height: '200px' }}
+            bodyStyle={{ paddingTop: 40, paddingBottom: 40, height: 220 }}
+            destroyOnClose={true}
+          >
+            <Form layout="vertical">
+              <Row gutter={16}>
+                <Col span={24}>
+                  <Form.Item label="Room ID" required={true}>
+                    <Input
+                      // value={this.newProduct.name}
+                      onChange={this.onRoomIdChange}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={24}>
+                  <Form.Item label="Password" required={true}>
+                    <Input
+                      // value={this.newProduct.description}
+                      onChange={this.onPasswordChange}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Modal>
+        )}
       </>
     );
   }

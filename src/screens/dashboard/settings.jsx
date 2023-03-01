@@ -196,6 +196,11 @@ class SettingsScreen extends React.Component {
     return false;
   }
 
+  @computed
+  get isMobile() {
+    return !!store.isMobile;
+  }
+
   render() {
     if (!this.is_fetch_complete) {
       return (
@@ -205,27 +210,42 @@ class SettingsScreen extends React.Component {
       );
     }
     return (
-      <RightContainer>
-        <TitleContainer>
+      <div
+        style={{ maxHeight: this.isMobile ? "90%" : "" }}
+        className="w-full flex flex-col px-10 mobile:p-4 "
+      >
+        <div className="w-full flex justify-between items-center mt-32 mobile:mt-8">
           <Text
-            style={{ fontSize: 30, fontFamily: "Montserrat", color: "#043d75" }}
+            style={{ fontSize: 30, fontFamily: "Montserrat" }}
+            className="text-purple-900"
           >
             Settings
           </Text>
-          {/* <Text type="secondary" style={{ fontSize: 16, fontFamily: 'Montserrat'  }}>You can change your app settings</Text> */}
-          <Button
-            disabled={this.isUpdateButtonDisabled}
-            type="primary"
-            onClick={this.updateSettings}
-          >
-            Update my settings
-          </Button>
-        </TitleContainer>
+          {!store.isMobile && (
+            <div
+              className={`mt-5 w-auto mobile:w-full flex items-center 
+          justify-center p-5 h-10 rounded bg-purple-800 hover:bg-purple-900 
+          text-purple-100 hover:text-purple-50 cursor-pointer ${
+            this.isUpdateButtonDisabled
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "font-bold"
+          } `}
+              onClick={() =>
+                this.isUpdateButtonDisabled ? null : this.updateSettings()
+              }
+            >
+              Update my settings
+            </div>
+          )}
+        </div>
         <SettingsContainer
           style={{ overflow: "auto", scrollBehavior: "smooth" }}
         >
           <Row style={{ paddingTop: 16, paddingBottom: 16 }} gutter={48}>
-            <Col style={{ display: "flex", flexDirection: "column" }} span={12}>
+            <Col
+              style={{ display: "flex", flexDirection: "column" }}
+              span={this.isMobile ? 24 : 12}
+            >
               <Divider orientation="left">General</Divider>
               <Checkbox
                 style={{ marginBottom: 16 }}
@@ -249,34 +269,19 @@ class SettingsScreen extends React.Component {
                 Show my meeting duration
               </Checkbox>
             </Col>
-            <Col style={{ display: "flex", flexDirection: "column" }} span={12}>
+            <Col
+              style={{ display: "flex", flexDirection: "column" }}
+              className={`flex column ${this.isMobile ? "mt-5" : ""} `}
+              span={this.isMobile ? 24 : 12}
+            >
               <Divider orientation="left">Profile</Divider>
               <Text style={{ fontSize: 24 }}>
                 {this.props.user.displayName}
               </Text>
               <Text type="secondary">{this.props.user.email}</Text>
-              {/* <Tooltip
-                placement="rightTop"
-                title="An email will be sent to your email address to reset your password"
-              >
-                <Button
-                  type="link"
-                  block={false}
-                  icon={<InfoCircleOutlined style={{ fontSize: 20 }} />}
-                  style={{
-                    marginTop: 24,
-                    display: "flex",
-                    alignItems: "center",
-                    paddingLeft: 0,
-                  }}
-                  onClick={this.forgotPassword}
-                >
-                  Reset Password
-                </Button>
-              </Tooltip> */}
             </Col>
           </Row>
-          <Row style={{ marginTop: 16, paddingTop: 16, paddingBottom: 16 }}>
+          <Row style={{ marginTop: 20, paddingBottom: 16 }}>
             <Col span={24} style={{}}>
               <Divider orientation="left">Media Devices</Divider>
               <Checkbox
@@ -285,7 +290,7 @@ class SettingsScreen extends React.Component {
               >
                 Turn of my media devices when joining a meeting
               </Checkbox>
-              <MediaDeviceOptionsContainer>
+              <div className={` w-full mt-12 flex mobile:flex-col `}>
                 <VideoContainer>
                   <Video
                     frameStyle={{
@@ -305,7 +310,7 @@ class SettingsScreen extends React.Component {
                     autoPlay
                   />
                 </VideoContainer>
-                <DropDownContainer>
+                <div className="flex flex-1 w-full flex-start ml-8 mobile:ml-0 mobile:mt-5">
                   <StyleContainer>
                     <OptionContainer>
                       <OptionTextContainer>
@@ -403,12 +408,28 @@ class SettingsScreen extends React.Component {
                       </Select>
                     </OptionContainer>
                   </StyleContainer>
-                </DropDownContainer>
-              </MediaDeviceOptionsContainer>
+                </div>
+              </div>
             </Col>
           </Row>
+          {!!store.isMobile && (
+            <div
+              className={`mt-5 w-full flex items-center 
+            justify-center p-5 h-10 rounded bg-purple-800 hover:bg-purple-900 
+            text-purple-100 hover:text-purple-50 cursor-pointer ${
+              this.isUpdateButtonDisabled
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "font-bold"
+            } `}
+              onClick={() =>
+                this.isUpdateButtonDisabled ? null : this.updateSettings()
+              }
+            >
+              Update my settings
+            </div>
+          )}
         </SettingsContainer>
-      </RightContainer>
+      </div>
     );
   }
 }
@@ -448,24 +469,12 @@ const SettingsContainer = styled.div`
   flex-direction: column;
 `;
 
-const MediaDeviceOptionsContainer = styled.div`
-  width: 100%;
-  margin-top: 48px;
-  display: flex;
-`;
-
 const VideoContainer = styled.div`
   display: flex;
   flex: 1 1 0;
   justify-content: flex-start;
 `;
 
-const DropDownContainer = styled.div`
-  display: flex;
-  flex: 1 1 0;
-  justify-content: flex-start;
-  margin-left: 32px;
-`;
 const StyleContainer = styled.div`
   display: flex;
   width: 60%;

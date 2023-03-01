@@ -113,29 +113,27 @@ class DashboardScreen extends React.Component {
       );
     }
     return (
-      <RightContainer>
-        <GreetingsContainer>
-          <NameContainer>
+      <div className="flex h-full w-full flex-col px-10 mobile:p-5 ">
+        <div className="w-full h-26 flex mt-36 mobile:flex-col mobile:mt-8">
+          <div className="w-full flex items-center">
             <Text
               style={{
-                fontSize: 30,
                 fontFamily: "Montserrat",
-                color: "#043d75",
               }}
               ellipsis={{ tooltip: this.user.displayName }}
+              className="text-purple-900 text-3xl mobile:text-4xl mobile:font-bold "
             >
               Hi, {this.user.displayName}!
             </Text>
             {/* <Text type="secondary">Meeting Notes</Text> */}
-          </NameContainer>
-          <DateContainer>
+          </div>
+          <div className="flex flex-col w-1/2 mobile:w-full mobile:mt-10 ">
             <Title
               style={{
-                fontSize: 64,
                 marginBottom: 0,
-                textAlign: "center",
-                color: "#002766",
+                // textAlign: "center",
               }}
+              className="text-purple-900 text-6xl mobile:text-2xl mobile:relative mobile:-left-0.5 "
             >
               {this.time}
             </Title>
@@ -143,56 +141,55 @@ class DashboardScreen extends React.Component {
               style={{
                 fontSize: 20,
                 fontFamily: "Montserrat",
-                color: "#002766",
               }}
+              className="text-purple-900"
             >
               {moment().format("dddd, D MMMM")}
             </Text>
-          </DateContainer>
-        </GreetingsContainer>
+          </div>
+        </div>
 
-        <MeetingOptions>
-          <OptionContainer>
-            <OptionCard onClick={this.createMeeting}>
+        <div className="flex items-center gap-16 mt-20">
+          <div className="flex flex-col items-center">
+            <div
+              className={
+                "cursor-pointer w-24 h-24 rounded-lg shadow-md flex items-center justify-center bg-purple-600 hover:bg-purple-800 transition-all"
+              }
+              onClick={this.createMeeting}
+            >
               <VideoCameraOutlined style={{ fontSize: 50, color: "white" }} />
-            </OptionCard>
+            </div>
             <Text
               style={{
                 marginTop: 10,
                 fontFamily: "Montserrat",
-                color: "#002766",
               }}
+              className="text-purple-900"
             >
               New Meeting
             </Text>
-          </OptionContainer>
+          </div>
 
-          <OptionContainer>
-            <OptionCard onClick={this.changeModalVisibility}>
+          <div className="flex flex-col items-center ">
+            <div
+              className={
+                "cursor-pointer w-24 h-24 rounded-lg shadow-md flex items-center justify-center bg-purple-600 hover:bg-purple-800 transition-all"
+              }
+              onClick={this.changeModalVisibility}
+            >
               <PlusSquareOutlined style={{ fontSize: 50, color: "white" }} />
-            </OptionCard>
+            </div>
             <Text
               style={{
                 marginTop: 10,
                 fontFamily: "Montserrat",
-                color: "#002766",
               }}
+              className="text-purple-900"
             >
               Join
             </Text>
-          </OptionContainer>
-
-          {/* <OptionContainer>
-            <OptionCard >
-              <MessageOutlined style={{ fontSize: 50, color: 'white' }} />
-            </OptionCard>
-            <Text style={{ marginTop: 10, fontFamily: 'Montserrat', color: "#002766" }}>Saved Messages</Text>
-          </OptionContainer> */}
-        </MeetingOptions>
-
-        <BackgroundContainer>
-          {/* <img style={{ width: 600, height: 300 }} src={backgroundImg} alt="backgrond-image"/> */}
-        </BackgroundContainer>
+          </div>
+        </div>
 
         <JoinRoom
           isModalVisible={this.isModalVisible}
@@ -200,7 +197,7 @@ class DashboardScreen extends React.Component {
           history={this.props.history}
           user={this.user}
         />
-      </RightContainer>
+      </div>
     );
   }
 }
@@ -211,92 +208,6 @@ const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex: 1 1 auto;
-  /* background-color:yellow; */
-  /* align-items: center; */
-  padding-left: 60px;
-  padding-right: 60px;
-`;
-
-const GreetingsContainer = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 140px;
-`;
-
-const NameContainer = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  overflow: hidden;
-`;
-
-const DateContainer = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 250px !important;
-  align-items: flex-end;
-  justify-content: center;
-`;
-
-const MeetingOptions = styled.div`
-  width: 40%;
-  height: 150px;
-  display: flex;
-  margin-top: 70px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const OptionContainer = styled.div`
-  /* width: 300px; */
-  /* height: 110px; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const OptionCard = styled.div`
-  width: 90px;
-  height: 90px;
-  border-radius: 30px;
-  box-shadow: 0px 12px 24px rgba(132, 153, 193, 0.08);
-  /* margin-right: 180px; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #bae7ff;
-  transition: 0.3s;
-
-  &:hover {
-    cursor: pointer;
-    background-color: #1890ff;
-    transform: translateY(-10px);
-  }
-`;
-
-const BackgroundContainer = styled.div`
-  width: 100%;
-  height: 460px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  background-repeat: no-repeat, no-repeat;
-  background-size: 100% 100%;
-  background-position: left top, right top;
 `;
 
 export default DashboardScreen;

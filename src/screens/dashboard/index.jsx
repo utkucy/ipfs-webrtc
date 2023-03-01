@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { action, observable, computed, toJS } from "mobx";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   Button,
   Typography,
@@ -192,6 +192,62 @@ class DashboardScreen extends React.Component {
     return <MainScreen user={this.user} history={this.props.history} />;
   }
 
+  @computed
+  get menuItems() {
+    const isMobile = store.isMobile;
+    return [
+      {
+        icon: (
+          <HomeOutlined
+            style={{
+              height: 24,
+              fontSize: 24,
+            }}
+          />
+        ),
+        title: "Home",
+      },
+      {
+        icon: (
+          <ClockCircleOutlined
+            style={{
+              height: 24,
+              fontSize: 24,
+            }}
+          />
+        ),
+        title: "Meetings",
+      },
+      {
+        icon: (
+          <ContactsOutlined
+            style={{
+              height: 24,
+              fontSize: 24,
+            }}
+          />
+        ),
+        title: "Contacts",
+      },
+      {
+        icon: (
+          <SettingOutlined
+            style={{
+              height: 24,
+              fontSize: 24,
+            }}
+          />
+        ),
+        title: "Settings",
+      },
+      {
+        icon: <LogoutOutlined style={{ height: 24, fontSize: 24 }} />,
+        title: "Logout",
+        onClick: this.logout,
+      },
+    ];
+  }
+
   render() {
     if (this.user === undefined) {
       return (
@@ -217,9 +273,13 @@ class DashboardScreen extends React.Component {
       );
     }
     return (
-      <Layout style={{ height: "100%" }}>
-        <Sider theme="light">
-          <LeftContainer>
+      <div className="w-screen max-w-screen min-w-screen h-screen min-h-screen max-h-screen flex mobile:flex-col-reverse mobile:justify-between">
+        <div
+          className="w-64 h-full flex flex-col justify-center px-5 bg-purple-700 overflow-hidden
+          mobile:w-full mobile:h-20 mobile:min-h-20 mobile:flex-row mobile:flex-wrap
+          mobile:py-4 mobile:justify-center mobile:items-center mobile:gap-2 mobile:absolute mobile:bottom-0"
+        >
+          {!store.isMobile && (
             <LogoContainer>
               {/* <img style={{ marginTop: 32 }} src={logo} alt="Logo" /> */}
               <Title
@@ -228,181 +288,44 @@ class DashboardScreen extends React.Component {
                   fontFamily: "Montserrat",
                   textAlign: "center",
                   marginBottom: 0,
-                  color: "#002766",
                 }}
+                className="text-purple-50"
               >
                 Web3RTC
               </Title>
             </LogoContainer>
-            <LeftOptionContainer>
-              <StyledButton
-                type="link"
-                shape="circle"
-                style={{ borderWidth: 0, padding: 0, marginBottom: 70 }}
-                icon={
-                  <HomeOutlined
-                    style={{
-                      height: 32,
-                      fontSize: 32,
-                      color: this.selectedIndex === 0 ? "white" : "#bae7ff",
-                    }}
-                  />
-                }
-                size={32}
-                ghost
-                onMouseEnter={() => this.changeHoveredIndex(1)}
-                onMouseLeave={() => this.changeHoveredIndex(0)}
-                onClick={() => this.changeSelectedIndex(0)}
-              >
-                {this.hoverIndex === 1 && (
-                  <Text
-                    style={{
-                      transition: 0.3,
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: this.selectedIndex === 0 ? "white" : "#bae7ff",
-                    }}
-                  >
-                    Home
-                  </Text>
-                )}
-              </StyledButton>
-              <StyledButton
-                type="link"
-                shape="circle"
-                style={{ borderWidth: 0, padding: 0, marginBottom: 70 }}
-                icon={
-                  <ClockCircleOutlined
-                    style={{
-                      height: 32,
-                      fontSize: 32,
-                      color: this.selectedIndex === 1 ? "white" : "#bae7ff",
-                    }}
-                  />
-                }
-                size={32}
-                ghost
-                onMouseEnter={() => this.changeHoveredIndex(2)}
-                onMouseLeave={() => this.changeHoveredIndex(0)}
-                onClick={() => this.changeSelectedIndex(1)}
-              >
-                {this.hoverIndex === 2 && (
-                  <Text
-                    style={{
-                      transition: 0.3,
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: this.selectedIndex === 1 ? "white" : "#bae7ff",
-                    }}
-                  >
-                    Past Meetings
-                  </Text>
-                )}
-              </StyledButton>
-              <StyledButton
-                type="link"
-                shape="circle"
-                style={{ borderWidth: 0, padding: 0, marginBottom: 70 }}
-                icon={
-                  <ContactsOutlined
-                    style={{
-                      height: 32,
-                      fontSize: 32,
-                      color: this.selectedIndex === 2 ? "white" : "#bae7ff",
-                    }}
-                  />
-                }
-                size={32}
-                ghost
-                onMouseEnter={() => this.changeHoveredIndex(3)}
-                onMouseLeave={() => this.changeHoveredIndex(0)}
-                onClick={() => this.changeSelectedIndex(2)}
-              >
-                {this.hoverIndex === 3 && (
-                  <Text
-                    style={{
-                      transition: 0.3,
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: this.selectedIndex === 2 ? "white" : "#bae7ff",
-                    }}
-                  >
-                    Contacts
-                  </Text>
-                )}
-              </StyledButton>
-              <StyledButton
-                type="link"
-                shape="circle"
-                style={{ borderWidth: 0, padding: 0, marginBottom: 70 }}
-                icon={
-                  <SettingOutlined
-                    style={{
-                      height: 32,
-                      fontSize: 32,
-                      color: this.selectedIndex === 3 ? "white" : "#bae7ff",
-                    }}
-                  />
-                }
-                size={32}
-                ghost
-                onMouseEnter={() => this.changeHoveredIndex(4)}
-                onMouseLeave={() => this.changeHoveredIndex(0)}
-                onClick={() => this.changeSelectedIndex(3)}
-              >
-                {this.hoverIndex === 4 && (
-                  <Text
-                    style={{
-                      transition: 0.3,
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontSize: 16,
-                      color: this.selectedIndex === 3 ? "white" : "#bae7ff",
-                    }}
-                  >
-                    Settings
-                  </Text>
-                )}
-              </StyledButton>
-              <StyledButton
-                type="link"
-                shape="circle"
-                style={{ borderWidth: 0, padding: 0 }}
-                icon={
-                  <LogoutOutlined
-                    style={{ height: 32, fontSize: 32, color: "#bae7ff" }}
-                  />
-                }
-                size={32}
-                ghost
-                onMouseEnter={() => this.changeHoveredIndex(5)}
-                onMouseLeave={() => this.changeHoveredIndex(0)}
-                onClick={this.logout}
-                // style={{ width: 200, height: 30 }}
-              >
-                {this.hoverIndex === 5 && (
-                  <Text
-                    style={{ fontSize: 16, fontWeight: 600, color: "#bae7ff" }}
-                  >
-                    Logout
-                  </Text>
-                )}
-              </StyledButton>
-            </LeftOptionContainer>
-          </LeftContainer>
-        </Sider>
-        <Layout>
-          <Content
-            style={{
-              overflow: "auto",
-              height: "100%",
-              backgroundColor: "rgb(246, 248, 252)",
-            }}
-          >
-            {this.selectedScreen}
-          </Content>
-        </Layout>
-      </Layout>
+          )}
+          {this.menuItems.map((item, index) => (
+            <div
+              key={index}
+              className={`flex items-center gap-2 cursor-pointer 
+            px-3 py-2 mb-20 rounded transition-all
+             hover:text-purple-900 hover:bg-purple-200 ${
+               this.selectedIndex === index
+                 ? "text-purple-900 bg-purple-200"
+                 : "text-purple-100"
+             } 
+            mobile:mb-0 
+             `}
+              onClick={() =>
+                item.onClick ? item.onClick : this.changeSelectedIndex(index)
+              }
+            >
+              {item.icon}
+              {!store.isMobile && (
+                <div
+                  className={` items-center h-full font-custom font-bold text-base flex  relative top-0.5`}
+                >
+                  {item.title}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="w-full h-full mobile:hMobileContent flex bg-purple-50 ">
+          {this.selectedScreen}
+        </div>
+      </div>
     );
   }
 }
@@ -415,63 +338,13 @@ const SpinnerContainer = styled.div`
   align-items: center;
 `;
 
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  /* box-shadow: 0px 12px 24px rgba(132, 153, 193, 0.08); */
-  overflow-x: hidden;
-`;
-
-const LeftContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  flex: 0 0 200px;
-  /* background-color: red; */
-`;
-
 const LogoContainer = styled.div`
+  position: absolute;
+  top: 24px;
   display: flex;
   flex: 0 0 100px;
   justify-content: center;
   align-items: center;
-  background-color: #003a8c;
-`;
-const LeftOptionContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  /* border-top-right-radius: 50px; */
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #1890ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to bottom,
-    #003a8c,
-    #1890ff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to bottom,
-    #003a8c,
-    #1890ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-  /* background: #ad5389;  
-  background: -webkit-linear-gradient(to bottom, #3c1053, #ad5389);  
-  background: linear-gradient(to bottom, #3c1053, #ad5389);  */
-`;
-
-const StyledButton = styled(Button)`
-  transition: 0.3s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    transform: translateX(-10px);
-  }
 `;
 
 export default DashboardScreen;

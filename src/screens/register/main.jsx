@@ -225,6 +225,7 @@ class RegisterScreen extends React.Component {
           <Form.Item
             name="name"
             label="Name"
+            style={{ fontSize: 16 }}
             rules={[
               {
                 required: true,
@@ -242,6 +243,7 @@ class RegisterScreen extends React.Component {
           <Form.Item
             name="surname"
             label="Surname"
+            style={{ fontSize: 16 }}
             rules={[
               {
                 required: true,
@@ -259,7 +261,7 @@ class RegisterScreen extends React.Component {
           <Form.Item
             name="email"
             label="E-mail"
-            style={{ borderRadius: 8 }}
+            style={{ borderRadius: 8, fontSize: 16 }}
             rules={[
               {
                 type: "email",
@@ -281,7 +283,7 @@ class RegisterScreen extends React.Component {
           <Form.Item
             name="password"
             label="Password"
-            style={{ borderRadius: 8 }}
+            style={{ borderRadius: 8, fontSize: 16 }}
             dependencies={["password"]}
             rules={[
               {
@@ -302,7 +304,7 @@ class RegisterScreen extends React.Component {
           <Form.Item
             name="confirm"
             label="Confirm Password"
-            style={{ borderRadius: 8 }}
+            style={{ borderRadius: 8, fontSize: 16 }}
             dependencies={["password"]}
             hasFeedback
             rules={[
@@ -330,7 +332,7 @@ class RegisterScreen extends React.Component {
             />
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item style={{ fontSize: 16 }}>
             <button
               // type="primary"
               onClick={this.handleSignup}

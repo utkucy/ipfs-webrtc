@@ -158,16 +158,44 @@ class MeetingRecordsScreen extends React.Component {
       );
     }
     return (
-      <RightContainer>
-        <TitleContainer>
+      <div className="w-full flex flex-col px-10 mobile:p-4 ">
+        <div className="w-full flex justify-start mt-32 mobile:mt-8">
           <Text
-            style={{ fontSize: 30, fontFamily: "Montserrat", color: "#043d75" }}
+            style={{ fontSize: 30, fontFamily: "Montserrat" }}
+            className="text-purple-900"
           >
             Meeting Records
           </Text>
-        </TitleContainer>
-        <TableContainer>
-          <Table columns={this.columns} dataSource={this.meeting_records} />
+        </div>
+        <div
+          className={`w-full ${
+            store.isMobile ? "flex overflow-y-hidden" : "block mt-10 h-full "
+          }  `}
+          style={{ height: store.isMobile ? "90%" : "" }}
+        >
+          {!store.isMobile ? (
+            <Table columns={this.columns} dataSource={this.meeting_records} />
+          ) : (
+            <div className="h-full w-full mt-5 flex flex-col gap-4 pr-5 overflow-y-auto ">
+              {this.meeting_records.map((record, index) => (
+                <div
+                  key={index}
+                  className="flex w-full p-5 rounded bg-purple-200 text-purple-900 justify-between items-center gap-4 "
+                >
+                  <div className="flex flex-col gap:3">
+                    <div className="font-bold">{record.host_displayName}</div>
+                    <div>{record.date}</div>
+                  </div>
+                  <div
+                    className="font-bold cursor-pointer"
+                    onClick={() => this.showParticipantModal(record)}
+                  >
+                    Show Participants
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {this.record && (
             <Drawer
               title="Participant List"
@@ -176,7 +204,7 @@ class MeetingRecordsScreen extends React.Component {
               onClose={this.closeModal}
               destroyOnClose={true}
               visible={this.is_modal_visible}
-              width="40%"
+              width={store.isMobile ? "100%" : "40%"}
             >
               <List
                 itemLayout="horizontal"
@@ -205,8 +233,8 @@ class MeetingRecordsScreen extends React.Component {
               />
             </Drawer>
           )}
-        </TableContainer>
-      </RightContainer>
+        </div>
+      </div>
     );
   }
 }
@@ -217,17 +245,6 @@ const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex: 1 1 auto;
-  /* background-color:yellow; */
-  /* align-items: center; */
-  padding-left: 60px;
-  padding-right: 60px;
 `;
 
 const TitleContainer = styled.div`
@@ -243,7 +260,6 @@ const TableContainer = styled.div`
   width: 100%;
   display: block;
   margin-top: 40px;
-  margin-bottom: 40px;
   overflow: auto;
 `;
 

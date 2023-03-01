@@ -3,7 +3,11 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   important: true,
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        hMobileContent: "calc(100vh - 80px) !important",
+      },
+    },
     screens: {
       mobile: { max: "767px" },
       // => @media (max-width: 767px) { ... }

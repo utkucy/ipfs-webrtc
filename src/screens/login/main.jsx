@@ -238,6 +238,7 @@ class LoginScreen extends React.Component {
               name="email"
               rules={[{ required: true, message: "Please input your Email!" }]}
               label="Email"
+              style={{ fontSize: 16 }}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
@@ -261,6 +262,7 @@ class LoginScreen extends React.Component {
               rules={[
                 { required: true, message: "Please input your Password!" },
               ]}
+              style={{ fontSize: 16 }}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
@@ -283,6 +285,7 @@ class LoginScreen extends React.Component {
                 width: "100%",
                 display: "flex",
                 justifyContent: "space-between",
+                fontSize: 16,
               }}
             >
               <CheckedContainer>
@@ -301,7 +304,7 @@ class LoginScreen extends React.Component {
               </CheckedContainer>
             </Form.Item>
 
-            <Form.Item style={{ marginBottom: 10 }}>
+            <Form.Item style={{ marginBottom: 10, fontSize: 16 }}>
               <ButtonContainer>
                 <div
                   // type="primary"
