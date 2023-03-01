@@ -143,7 +143,7 @@ export default class Messages extends React.Component {
           onPressEnter={(e) => this.handleSend(e)}
           placeholder="Enter your message"
           onChange={(e) => this.onMessageChange(e.target.value)}
-          style={{ height: 84 }}
+          style={{ height: 84, fontSize: 16 }}
           className="w-full bg-slate-600 border-none hover:border-none focus:border-none rounded-none text-white"
         />
       </Container>

@@ -145,15 +145,17 @@ class Video extends Component {
           ref={(ref) => {
             this.video = ref;
           }}
+          webkit-playsinline="true"
+          playsinline="true"
         ></video>
         <Text
           style={{
-            color: "#1890ff",
-            fontSize: 12,
             position: "absolute",
             bottom: 10,
             left: 15,
+            fontSize: "12px",
           }}
+          className="p-1 rounded bg-purple-200 text-purple-800"
         >
           {this.props.name ? this.props.name : " "}
         </Text>

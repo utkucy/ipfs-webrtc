@@ -225,7 +225,6 @@ class RegisterScreen extends React.Component {
           <Form.Item
             name="name"
             label="Name"
-            style={{ fontSize: 16 }}
             rules={[
               {
                 required: true,
@@ -236,14 +235,13 @@ class RegisterScreen extends React.Component {
             <Input
               value={this.name}
               onChange={(e) => this.setName(e.target.value)}
-              style={{ borderRadius: 8 }}
+              style={{ borderRadius: 8, fontSize: 16 }}
             />
           </Form.Item>
 
           <Form.Item
             name="surname"
             label="Surname"
-            style={{ fontSize: 16 }}
             rules={[
               {
                 required: true,
@@ -254,14 +252,14 @@ class RegisterScreen extends React.Component {
             <Input
               value={this.surname}
               onChange={(e) => this.setSurname(e.target.value)}
-              style={{ borderRadius: 8 }}
+              style={{ borderRadius: 8, fontSize: 16 }}
             />
           </Form.Item>
 
           <Form.Item
             name="email"
             label="E-mail"
-            style={{ borderRadius: 8, fontSize: 16 }}
+            style={{ borderRadius: 8 }}
             rules={[
               {
                 type: "email",
@@ -276,14 +274,14 @@ class RegisterScreen extends React.Component {
             <Input
               value={this.email}
               onChange={(e) => this.setEmail(e.target.value)}
-              style={{ borderRadius: 8 }}
+              style={{ borderRadius: 8, fontSize: 16 }}
             />
           </Form.Item>
 
           <Form.Item
             name="password"
             label="Password"
-            style={{ borderRadius: 8, fontSize: 16 }}
+            style={{ borderRadius: 8 }}
             dependencies={["password"]}
             rules={[
               {
@@ -297,14 +295,14 @@ class RegisterScreen extends React.Component {
               type="password"
               value={this.password}
               onChange={(e) => this.setPassword(e.target.value)}
-              style={{ borderRadius: 8 }}
+              style={{ borderRadius: 8, fontSize: 16 }}
             />
           </Form.Item>
 
           <Form.Item
             name="confirm"
             label="Confirm Password"
-            style={{ borderRadius: 8, fontSize: 16 }}
+            style={{ borderRadius: 8 }}
             dependencies={["password"]}
             hasFeedback
             rules={[
@@ -328,11 +326,11 @@ class RegisterScreen extends React.Component {
               type="password"
               value={this.verifyPassword}
               onChange={(e) => this.setVerifyPassword(e.target.value)}
-              style={{ borderRadius: 8 }}
+              style={{ borderRadius: 8, fontSize: 16 }}
             />
           </Form.Item>
 
-          <Form.Item style={{ fontSize: 16 }}>
+          <Form.Item>
             <button
               // type="primary"
               onClick={this.handleSignup}

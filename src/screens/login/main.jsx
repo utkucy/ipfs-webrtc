@@ -238,7 +238,6 @@ class LoginScreen extends React.Component {
               name="email"
               rules={[{ required: true, message: "Please input your Email!" }]}
               label="Email"
-              style={{ fontSize: 16 }}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
@@ -248,6 +247,7 @@ class LoginScreen extends React.Component {
                 value={this.email}
                 onChange={(e) => this.setEmail(e.target.value)}
                 className="rounded-lg hover:border-purple-500"
+                style={{ fontSize: 16 }}
               />
               <WarningContainer>
                 <Text type="danger" className="errorMsg">
@@ -262,7 +262,6 @@ class LoginScreen extends React.Component {
               rules={[
                 { required: true, message: "Please input your Password!" },
               ]}
-              style={{ fontSize: 16 }}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
@@ -272,6 +271,7 @@ class LoginScreen extends React.Component {
                 value={this.password}
                 onChange={(e) => this.setPassword(e.target.value)}
                 className="rounded-lg hover:border-purple-500"
+                style={{ fontSize: 16 }}
               />
               <WarningContainer>
                 <Text type="danger" className="errorMsg">
