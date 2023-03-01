@@ -13,6 +13,8 @@ import {
   Layout,
   Menu,
   notification,
+  Popover,
+  Tooltip,
 } from "antd";
 import { Cookies } from "react-cookie";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -31,6 +33,12 @@ import {
   SettingOutlined,
   AudioMutedOutlined,
   FieldTimeOutlined,
+  InfoOutlined,
+  LogoutOutlined,
+  InfoCircleOutlined,
+  FundProjectionScreenOutlined,
+  UsergroupAddOutlined,
+  MoreOutlined,
 } from "@ant-design/icons";
 import DrawerComponent from "../../components/screens/room/room-drawer/drawer.js";
 import { isElectron } from "../../utils";
@@ -59,8 +67,12 @@ const { Text, Title } = Typography;
 const { Header, Content, Sider, Footer } = Layout;
 const { SubMenu } = Menu;
 
+const FOOTER_HEIGHT = store.isMobile ? "50px" : "80px";
+
 @observer
 class RoomScreen extends React.Component {
+  @observable ICON_SIZE = store.isMobile ? 14 : 20;
+
   @observable socket = null;
   @observable localStream = null; // used to hold local stream object to avoid recreating the stream everytime a new offer comes
   @observable remoteStream = null; // used to hold remote stream object that is displayed in the main screen
@@ -896,11 +908,143 @@ class RoomScreen extends React.Component {
     else if (hour <= 0) this.time = min + ":" + sec;
   };
 
+  @computed
+  get videoCount() {
+    return (this.remoteStreams.length || 0) + 1;
+  }
+
+  @computed
+  get gridLayout() {
+    if (this.videoCount === 1)
+      return "grid grid-cols-1 grid-rows-1 h-full w-full";
+    else if (this.videoCount === 2)
+      return "grid grid-cols-2 grid-rows-1 h-full w-full";
+    else if (this.videoCount === 3)
+      return "grid grid-cols-2 grid-rows-2 h-full w-full";
+    else if (this.videoCount === 4)
+      return "grid grid-cols-2 grid-rows-2 h-full w-full";
+  }
+
+  @computed
+  get participantPopoverContent() {
+    return (
+      <div className="w-full h-full flex flex-col gap-2 ">
+        {this.current_participant_list?.map((participant) => (
+          <div
+            key={participant.uid}
+            className="flex gap-2 justify-start items-center py-2 px-4 hover:bg-purple-800 hover:text-white"
+          >
+            <UserOutlined />
+            {participant.displayName}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  @computed
+  get settingsPopoverContent() {
+    return (
+      <div className="w-full h-full flex flex-col gap-3 ">
+        <div className="flex flex-col gap-1">
+          <div className="text-purple-500 px-3 py-2">Microphone Sources</div>
+          {this.selectedMicSource && (
+            <div className="cursor-pointer py-2 px-4 hover:bg-purple-800 hover:text-white">
+              {this.selectedMicSource.label}
+            </div>
+          )}
+          {this.microphoneDevices.length &&
+            this.microphoneDevices.map((md) => (
+              <div
+                key={md.deviceId}
+                onClick={() => this.changeMicSource(md, false)}
+                className="py-2 px-4 hover:bg-purple-800 hover:text-white cursor-pointer"
+              >
+                {md.label}
+              </div>
+            ))}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div className="text-purple-500 px-3 py-2">Speaker Sources</div>
+          {this.selectedSpeakerSource && (
+            <div className="cursor-pointer py-2 px-4 hover:bg-purple-800 hover:text-white">
+              {this.selectedSpeakerSource.label}
+            </div>
+          )}
+          {!!this.speakerDevices.length &&
+            this.speakerDevices.map((md) => (
+              <div
+                key={md.deviceId}
+                onClick={() => this.changeSpeakerSource(md, false)}
+                className="py-2 px-4 hover:bg-purple-800 hover:text-white cursor-pointer"
+              >
+                {md.label}
+              </div>
+            ))}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div className="text-purple-500 px-3 py-2">Camera Sources</div>
+          {this.selectedVideoSource && (
+            <div className="cursor-pointer py-2 px-4 hover:bg-purple-800 hover:text-white">
+              {this.selectedVideoSource.label}
+            </div>
+          )}
+          {!!this.videoDevices.length &&
+            this.videoDevices.map((md) => (
+              <div
+                key={md.deviceId}
+                onClick={() => this.changeVideoSource(md, false)}
+                className="py-2 px-4 hover:bg-purple-800 hover:text-white cursor-pointer"
+              >
+                {md.label}
+              </div>
+            ))}
+        </div>
+      </div>
+    );
+  }
+
+  @computed
+  get morePopoverContent() {
+    return (
+      <div className="w-full h-full flex flex-col gap-2 ">
+        <div
+          className="cursor-pointer flex gap-2 justify-start items-center py-2 px-4 hover:bg-purple-800 hover:text-white"
+          onClick={this.showRoomInfoModal}
+        >
+          <InfoCircleOutlined stlye={{ width: 64 }} />
+          Show Room Info
+        </div>
+        <StyledPopover
+          content={this.settingsPopoverContent}
+          trigger="hover"
+          overlayClassName="popover-style"
+          placement="right"
+        >
+          <div className="cursor-pointer flex gap-2 justify-start items-center py-2 px-4 hover:bg-purple-800 hover:text-white">
+            <SettingOutlined />
+            Settings
+          </div>
+        </StyledPopover>
+
+        <div
+          className="cursor-pointer flex gap-2 justify-start items-center py-2 px-4 text-red-500 hover:bg-white"
+          onClick={this.showModal}
+        >
+          <LogoutOutlined />
+          Leave Room
+        </div>
+      </div>
+    );
+  }
+
   render() {
     if (this.isLoading) {
       return (
         <SpinnerContainer>
-          <Spin tip="Loading..." size="large" />
+          <Spin tip="Joining Room..." size="large" />
         </SpinnerContainer>
       );
     }
@@ -908,365 +1052,304 @@ class RoomScreen extends React.Component {
       <div style={{ color: "black", padding: 5 }}>{this.status}</div>
     );
     return (
-      <Layout id="outer-container" style={{ minHeight: "100vh" }}>
-        <Sider
-          className="sider"
-          theme="light"
-          collapsible
-          collapsed={this.collapsed}
-          onCollapse={(collapsed) => this.onCollapse(collapsed)}
+      <div
+        className={` ${
+          this.showDrawer ? "w-3/4" : "w-screen"
+        } h-screen flex flex-col`}
+      >
+        <VideoContainer
+          className={`w-full grid ${this.gridLayout} bg-yellow-400`}
         >
-          <div className="logo" />
-          <Menu
-            className="sider"
-            defaultSelectedKeys={["1"]}
-            mode="vertical"
-            selectable={false}
+          <div
+            style={{ position: "relative" }}
+            onDoubleClick={this.doubleClick}
           >
-            {this.user.settings.show_meeting_duration && (
-              <Menu.Item key="1" icon={<FieldTimeOutlined />} type="primary">
-                {this.time}
-              </Menu.Item>
-            )}
+            <Video
+              videoStyles={{
+                objectFit: "cover",
+                height: "100%",
+                width: "100%",
+              }}
+              frameStyle={{
+                backgroundColor: "#ffffff12",
+                // maxWidth: 120,
+                // maxHeight: 120,
+                width: "100%",
+                height: "100%",
+              }}
+              showMuteControls={false}
+              //ref={this.localVideoref}
+              videoStream={this.localStream}
+              muted="true"
+              autoPlay
+            />
+            <Text
+              style={{
+                position: "absolute",
+                bottom: 10,
+                left: 15,
+                fontSize: "12px",
+              }}
+              className="p-1 rounded bg-purple-200 text-purple-800"
+            >
+              {this.user.displayName}
+            </Text>
+          </div>
+          <Videos remoteStreams={this.remoteStreams} />
+        </VideoContainer>
+        <div
+          style={{ height: FOOTER_HEIGHT }}
+          className="w-full flex justify-center gap-4 items-center bg-purple-800"
+        >
+          <StyledPopover
+            content={this.participantPopoverContent}
+            trigger="hover"
+            overlayClassName="popover-style"
+          >
+            <div className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all">
+              <UsergroupAddOutlined style={{ fontSize: this.ICON_SIZE }} />
+            </div>
+          </StyledPopover>
 
-            <Menu.Item
-              key="2"
-              icon={<WechatOutlined />}
-              onClick={this.changeModalVisibility}
+          {!store.isMobile && (
+            <Tooltip
+              placement="topLeft"
+              title={this.isSharing ? "End Share" : "Share Screen"}
+              trigger="hover"
+              overlayClassName="tooltip-style"
             >
-              Chat
-            </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="Users">
-              {this.current_participant_list?.map((participant, index) => (
-                <Menu.Item
-                  icon={<UserOutlined />}
-                  style={{
-                    color:
-                      participant.uid === this.room.host_id ? "green" : "black",
-                  }}
-                  key={index}
-                >
-                  {participant.displayName}{" "}
-                </Menu.Item>
-              ))}
-            </SubMenu>
-            <Menu.Item
-              key="9"
-              icon={<FileOutlined />}
-              onClick={
-                this.shareVisible
-                  ? () => this.changeSharingStatus(false)
-                  : () => this.changeSharingStatus(true)
-              }
-            >
-              {this.isSharing ? "End Share" : "Share Screen"}
-            </Menu.Item>
-
-            <Menu.Item
-              key="10"
-              icon={<EyeOutlined />}
-              onClick={
-                this.recordModalVisible
-                  ? () => this.showRecordModalVisible(false)
-                  : () => this.showRecordModalVisible(true)
-              }
-            >
-              {this.recordModalVisible ? "Stop Recording" : "Record"}
-            </Menu.Item>
-
-            <SubMenu key="11" icon={<SettingOutlined />} title="Settings">
-              <Menu.ItemGroup title="Microphone Sources">
-                {this.selectedMicSource && (
-                  <Menu.Item key="99" style={{ color: "blue" }}>
-                    {this.selectedMicSource.label}
-                  </Menu.Item>
-                )}
-                {this.microphoneDevices.length &&
-                  this.microphoneDevices.map((md) => (
-                    <Menu.Item
-                      key={md.deviceId}
-                      onClick={() => this.changeMicSource(md, false)}
-                    >
-                      {md.label}
-                    </Menu.Item>
-                  ))}
-              </Menu.ItemGroup>
-              <Menu.Divider />
-              <Menu.ItemGroup title="Speaker Sources">
-                {this.selectedSpeakerSource && (
-                  <Menu.Item style={{ color: "blue" }} key="100">
-                    {this.selectedSpeakerSource.label}
-                  </Menu.Item>
-                )}
-                {!!this.speakerDevices.length &&
-                  this.speakerDevices.map((md) => (
-                    <Menu.Item
-                      key={md.deviceId}
-                      onClick={() => this.changeSpeakerSource(md, false)}
-                    >
-                      {md.label}
-                    </Menu.Item>
-                  ))}
-              </Menu.ItemGroup>
-              <Menu.ItemGroup title="Camera Sources">
-                {!!this.selectedVideoSource && (
-                  <Menu.Item style={{ color: "blue" }} key="101">
-                    {this.selectedVideoSource.label}
-                  </Menu.Item>
-                )}
-                {!!this.videoDevices.length &&
-                  this.videoDevices.map((md) => (
-                    <Menu.Item
-                      key={md.deviceId}
-                      onClick={() => this.changeVideoSource(md, false)}
-                    >
-                      {md.label}
-                    </Menu.Item>
-                  ))}
-              </Menu.ItemGroup>
-            </SubMenu>
-            <Menu.Divider />
-            <Menu.Item
-              key="12"
-              icon={
-                <VideoCameraOutlined
-                  style={{ color: this.is_camera_open ? "#000000" : "#ff4d4f" }}
-                />
-              }
-              onClick={this.changeCameraStatus}
-            >
-              Camera
-            </Menu.Item>
-            <Menu.Item
-              key="13"
-              icon={
-                this.is_microphone_open ? (
-                  <AudioOutlined />
-                ) : (
-                  <AudioMutedOutlined style={{ color: "#ff4d4f" }} />
-                )
-              }
-              onClick={this.changeMicStatus}
-            >
-              Microphone
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item
-              primary="true"
-              icon={<CopyOutlined />}
-              onClick={this.showRoomInfoModal}
-            >
-              Show Room Info
-            </Menu.Item>
-
-            <Modal
-              title="Room Info"
-              visible={this.showRoomInfoModalDialog}
-              // onOk={this.hideRoomInfoModal}
-              // okText="OK"
-              onCancel={this.hideRoomInfoModal}
-              // cancelText="done"
-              maskClosable="true"
-              footer={null}
-            >
-              Room ID: {this.props.match.params.roomID} <br />
-              Password: {this.props.match.params.password}
-              <CopyToClipboard
-                text={
-                  "Room ID: " +
-                  this.props.match.params.roomID +
-                  "\nPassword: " +
-                  this.props.match.params.password
+              <div
+                className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all"
+                onClick={
+                  this.shareVisible
+                    ? () => this.changeSharingStatus(false)
+                    : () => this.changeSharingStatus(true)
                 }
               >
-                <Button
-                  icon={<CopyOutlined />}
-                  style={{
-                    float: "right",
-                    position: "absolute",
-                    bottom: "30px",
-                    left: "400px",
-                  }}
-                >
-                  Copy
-                </Button>
-              </CopyToClipboard>
-            </Modal>
+                <FundProjectionScreenOutlined
+                  style={{ fontSize: this.ICON_SIZE }}
+                  className={`${this.isSharing ? "text-green-500" : "white"}`}
+                />
+                {/* {this.isSharing ? "End Share" : "Share Screen"} */}
+              </div>
+            </Tooltip>
+          )}
 
-            <Menu.Item
-              danger="true"
-              icon={<ArrowLeftOutlined />}
-              type="primary"
-              onClick={this.showModal}
+          {!store.isMobile && (
+            <Tooltip
+              placement="topLeft"
+              title={this.recordModalVisible ? "Stop Recording" : "Record"}
+              trigger="hover"
+              overlayClassName="tooltip-style"
             >
-              Leave
-            </Menu.Item>
+              <div
+                className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all"
+                onClick={
+                  this.recordModalVisible
+                    ? () => this.showRecordModalVisible(false)
+                    : () => this.showRecordModalVisible(true)
+                }
+              >
+                <EyeOutlined
+                  style={{ fontSize: this.ICON_SIZE }}
+                  className={`${
+                    this.recordModalVisible ? "text-green-500" : "white"
+                  }`}
+                />
+                {/* {this.recordModalVisible ? "Stop Recording" : "Record"} */}
+              </div>
+            </Tooltip>
+          )}
 
-            <Modal
-              title="Confirm"
-              visible={this.showModalDialog}
-              onOk={this.leaveRoom}
-              onCancel={this.hideModal}
-              okText="Yes"
-              cancelText="No"
-            >
-              {" "}
-              Are you sure you want to leave the meeting?
-            </Modal>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout" style={{ overflow: "hidden" }}>
-          <Content
-            id="content"
-            style={{
-              margin: "0 0",
-              width: this.showDrawer ? "70%" : "100%",
-              height: "100vh",
-            }}
+          <Tooltip
+            placement="topLeft"
+            title={this.is_camera_open ? "Close Camera" : "Open Camera"}
+            trigger="hover"
+            overlayClassName="tooltip-style"
           >
-            {this.isRecording && <RecordButtonContainer />}
-            <Modal
-              title="Choose your screen"
-              visible={this.desktopModalVisible && is_electron}
-              width={600}
-              onOk={() => this.changeDesktopModalVisibility(false)}
-              onCancel={() => this.changeDesktopModalVisibility(false)}
-            >
-              <DesktopSourceContainer>
-                {this.desktopStreams.length &&
-                  this.desktopStreams.map((stream, index) => (
-                    <SourceOption onClick={() => this.share(stream)}>
-                      <Video
-                        videoStyles={{
-                          width: 200,
-                        }}
-                        frameStyle={{
-                          width: 200,
-                          borderRadius: 5,
-                          backgroundColor: "black",
-                        }}
-                        videoStream={stream}
-                        muted="true"
-                        autoPlay
-                      />
-                      <Text style={{ textAlign: "center" }}>{stream.name}</Text>
-                    </SourceOption>
-                  ))}
-              </DesktopSourceContainer>
-            </Modal>
-
-            <ScreenRecording
-              is_electron={is_electron}
-              electron={electron}
-              desktopCapturer={desktop_capturer}
-              recordModalVisible={this.recordModalVisible}
-              showRecordModalVisible={this.showRecordModalVisible}
-              micStatus={this.is_microphone_open}
-              isItRecording={this.isItRecording}
-              isRecording={this.isRecording}
-              remoteStreams={this.remoteStreams}
-              roomId={this.roomID}
-              records={this.records}
-            />
-
             <div
-              className="site-layout-background"
+              className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all"
+              onClick={this.changeCameraStatus}
+            >
+              <VideoCameraOutlined
+                style={{ fontSize: this.ICON_SIZE }}
+                className={`${
+                  this.is_camera_open ? "text-green-500" : "text-red-500"
+                }`}
+              />
+              {/* Camera */}
+            </div>
+          </Tooltip>
+
+          <Tooltip
+            placement="topLeft"
+            title={
+              this.is_microphone_open ? "Close Microphone" : "Open Microphone"
+            }
+            trigger="hover"
+            overlayClassName="tooltip-style"
+          >
+            <div
+              className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all"
+              onClick={this.changeMicStatus}
+            >
+              {this.is_microphone_open ? (
+                <AudioOutlined
+                  className="text-green-500"
+                  style={{ fontSize: this.ICON_SIZE }}
+                />
+              ) : (
+                <AudioMutedOutlined
+                  style={{ fontSize: this.ICON_SIZE }}
+                  className="text-red-500"
+                />
+              )}
+              {/* Microphone */}
+            </div>
+          </Tooltip>
+
+          <Tooltip
+            placement="topLeft"
+            title={this.showDrawer ? "Close Chat" : "Open Chat"}
+            trigger="hover"
+            overlayClassName="tooltip-style"
+          >
+            <div
+              className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all"
+              onClick={this.changeModalVisibility}
+            >
+              <WechatOutlined
+                className={this.showDrawer ? "text-green-500" : ""}
+                style={{ fontSize: this.ICON_SIZE }}
+              />
+              {/* Chat */}
+            </div>
+          </Tooltip>
+
+          <StyledPopover
+            content={this.morePopoverContent}
+            overlayClassName="popover-style"
+          >
+            <div className="flex gap-2 items-center text-white font-semibold cursor-pointer hover:text-purple-900 hover:bg-purple-200 p-2 rounded transition-all">
+              <MoreOutlined style={{ fontSize: this.ICON_SIZE }} />
+            </div>
+          </StyledPopover>
+        </div>
+
+        <Modal
+          title="Room Info"
+          visible={this.showRoomInfoModalDialog}
+          // onOk={this.hideRoomInfoModal}
+          // okText="OK"
+          onCancel={this.hideRoomInfoModal}
+          // cancelText="done"
+          maskClosable="true"
+          footer={null}
+        >
+          Room ID: {this.props.match.params.roomID} <br />
+          Password: {this.props.match.params.password}
+          <CopyToClipboard
+            text={
+              "Room ID: " +
+              this.props.match.params.roomID +
+              "\nPassword: " +
+              this.props.match.params.password
+            }
+          >
+            <Button
+              icon={<CopyOutlined />}
               style={{
-                padding: 0,
-                margin: 16,
-                minHeight: 360,
-                display: "flex",
+                float: "right",
+                position: "absolute",
+                bottom: "30px",
+                left: "400px",
               }}
             >
-              <Container>
-                <Row>
-                  <Col>
-                    <div
-                      onDoubleClick={this.doubleClick}
-                      style={{
-                        display: "inline-block",
-                        width: "100%",
-                        height: "100%",
-                        position: "relative",
-                      }}
-                    >
-                      <Video
-                        videoStyles={{
-                          objectFit: "cover",
-                          height: "100%",
-                          width: "100%",
-                        }}
-                        frameStyle={{
-                          backgroundColor: "#ffffff12",
-                          // maxWidth: 120,
-                          // maxHeight: 120,
-                          width: "100%",
-                          height: "100%",
-                        }}
-                        showMuteControls={false}
-                        //ref={this.localVideoref}
-                        videoStream={this.localStream}
-                        muted="true"
-                        autoPlay
-                      />
-                      <Text
-                        style={{
-                          color: "#1890ff",
-                          position: "absolute",
-                          bottom: 10,
-                          left: 15,
-                          fontSize: "12px",
-                        }}
-                      >
-                        {this.user.displayName}
-                      </Text>
-                    </div>
-                  </Col>
-                  <Videos remoteStreams={this.remoteStreams} />
-                </Row>
-                <br />
-              </Container>
-            </div>
-            <DrawerComponent
-              room_id={this.roomID}
-              user={this.user}
-              showDrawer={this.showDrawer}
-              changeModalVisibility={this.changeModalVisibility}
-            />
-          </Content>
-        </Layout>
-      </Layout>
+              Copy
+            </Button>
+          </CopyToClipboard>
+        </Modal>
+
+        <Modal
+          title="Confirm"
+          visible={this.showModalDialog}
+          onOk={this.leaveRoom}
+          onCancel={this.hideModal}
+          okText="Yes"
+          cancelText="No"
+        >
+          {" "}
+          Are you sure you want to leave the meeting?
+        </Modal>
+
+        <Modal
+          title="Choose your screen"
+          visible={this.desktopModalVisible && is_electron}
+          width={600}
+          onOk={() => this.changeDesktopModalVisibility(false)}
+          onCancel={() => this.changeDesktopModalVisibility(false)}
+        >
+          <DesktopSourceContainer>
+            {this.desktopStreams.length &&
+              this.desktopStreams.map((stream, index) => (
+                <SourceOption onClick={() => this.share(stream)}>
+                  <Video
+                    videoStyles={{
+                      width: 200,
+                    }}
+                    frameStyle={{
+                      width: 200,
+                      borderRadius: 5,
+                      backgroundColor: "black",
+                    }}
+                    videoStream={stream}
+                    muted="true"
+                    autoPlay
+                  />
+                  <Text style={{ textAlign: "center" }}>{stream.name}</Text>
+                </SourceOption>
+              ))}
+          </DesktopSourceContainer>
+        </Modal>
+
+        <ScreenRecording
+          is_electron={is_electron}
+          electron={electron}
+          desktopCapturer={desktop_capturer}
+          recordModalVisible={this.recordModalVisible}
+          showRecordModalVisible={this.showRecordModalVisible}
+          micStatus={this.is_microphone_open}
+          isItRecording={this.isItRecording}
+          isRecording={this.isRecording}
+          remoteStreams={this.remoteStreams}
+          roomId={this.roomID}
+          records={this.records}
+        />
+
+        <DrawerComponent
+          room_id={this.roomID}
+          user={this.user}
+          showDrawer={this.showDrawer}
+          changeModalVisibility={this.changeModalVisibility}
+        />
+      </div>
     );
   }
 }
 
+const VideoContainer = styled.div`
+  height: calc(100vh - FOOTER_HEIGHT) !important;
+`;
+
+const StyledPopover = styled(Popover)``;
+
+// OLD
 const SpinnerContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-`;
-
-const StatusTextContainer = styled.div`
-  margin: 10px;
-  background-color: #cdc4ff4f;
-  padding: 10px;
-  border-radius: 5px;
-`;
-
-const RoomText = styled.h1`
-  display: flex;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: auto;
 `;
 
 const DesktopSourceContainer = styled.div`
@@ -1300,33 +1383,5 @@ function blinkingEffect() {
     }
   `;
 }
-
-const RecordButtonContainer = styled.div`
-  height: 15px;
-  width: 15px;
-  //border-width: 5px;
-  border-radius: 50%;
-  position: absolute;
-  top: 10px;
-  left: 218px;
-  background-color: red;
-  animation: ${blinkingEffect} 1s linear infinite;
-`;
-
-const Row = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  background-color: rgb(234, 236, 230);
-  flex-wrap: wrap;
-`;
-
-const Col = styled.div`
-  width: 50%;
-  height: 50%;
-  display: flex;
-  border: 2px solid #1890ff;
-`;
 
 export default RoomScreen;

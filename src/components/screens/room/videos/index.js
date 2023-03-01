@@ -19,45 +19,43 @@ class Videos extends Component {
             .getTracks()
             .filter((track) => track.kind === "video");
           return (
-            <Col>
-              <div
-                id={rVideo.id}
-                style={{
-                  cursoer: "pointer",
-                  display: "inline-block",
-                  width: "100%",
-                  height: "100%",
-                }}
-                key={index}
-              >
-                {(_videoTrack && (
-                  <Video
-                    videoType="remoteVideo"
-                    videoStream={rVideo.stream}
-                    rVideo={rVideo}
-                    name={rVideo.name}
-                    frameStyle={{
-                      backgroundColor: "#ffffff12",
-                      // maxWidth: 120,
-                      // maxHeight: 120,
-                      width: "100%",
-                      height: "100%",
-                    }}
-                    videoStyles={{
-                      // cursor: 'pointer',
-                      objectFit: "cover",
-                      // maxWidth: 120,
-                      // maxHeight: 120,
-                      height: "100%",
-                      // borderRadius: 5,
-                      width: "100%",
-                    }}
-                    // autoPlay
-                  />
-                )) || <div></div>}
-                {/* { <h1>{rVideo.name}</h1> } */}
-              </div>
-            </Col>
+            <div
+              id={rVideo.id}
+              style={{
+                cursoer: "pointer",
+                display: "inline-block",
+                width: "100%",
+                height: "100%",
+              }}
+              key={index}
+            >
+              {(_videoTrack && (
+                <Video
+                  videoType="remoteVideo"
+                  videoStream={rVideo.stream}
+                  rVideo={rVideo}
+                  name={rVideo.name}
+                  frameStyle={{
+                    backgroundColor: "#ffffff12",
+                    // maxWidth: 120,
+                    // maxHeight: 120,
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  videoStyles={{
+                    // cursor: 'pointer',
+                    objectFit: "cover",
+                    // maxWidth: 120,
+                    // maxHeight: 120,
+                    height: "100%",
+                    // borderRadius: 5,
+                    width: "100%",
+                  }}
+                  // autoPlay
+                />
+              )) || <div></div>}
+              {/* { <h1>{rVideo.name}</h1> } */}
+            </div>
           );
         })}
       </>

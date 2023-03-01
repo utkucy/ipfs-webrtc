@@ -106,29 +106,33 @@ export default class Messages extends React.Component {
           {this.messages.length > 0 &&
             this.messages.map((message, index) => (
               <MessageContainer
+                key={index}
                 alignRight={
                   message.userId === this.props.user._id ? true : false
                 }
               >
-                <Card
-                  title={
-                    message.userName +
-                    "\t" +
-                    moment(message.createdAt).format("H:mm")
-                  }
-                  size="small"
+                <div
                   style={{
                     width: "90%",
-                    borderRadius: 20,
-                    backgroundColor:
-                      message._id === this.props.user._id
-                        ? " #add8e6"
-                        : " #d8daf3",
                   }}
+                  className={`flex flex-col rounded text-purple-100 px-4 py-2 bg-slate-600  `}
                 >
-                  <p>{message.text}</p>
+                  <p
+                    className="break-words w-full h-auto"
+                    style={{ fontSize: 16 }}
+                  >
+                    {message.text}
+                  </p>
+                  <div
+                    style={{ fontSize: 12 }}
+                    className="text-purple-50 font-semibold break-words"
+                  >
+                    {message.userName +
+                      "\t" +
+                      moment(message.createdAt).format("H:mm")}
+                  </div>
                   <div ref={this.messagesEndRef} />
-                </Card>
+                </div>
               </MessageContainer>
             ))}
         </CardContainer>
@@ -137,8 +141,10 @@ export default class Messages extends React.Component {
         <Input
           value={this.message}
           onPressEnter={(e) => this.handleSend(e)}
-          placeholder="Type here"
+          placeholder="Enter your message"
           onChange={(e) => this.onMessageChange(e.target.value)}
+          style={{ height: 84 }}
+          className="w-full bg-slate-600 border-none hover:border-none focus:border-none rounded-none text-white"
         />
       </Container>
     );
@@ -166,4 +172,5 @@ const CardContainer = styled.div`
   flex-direction: column;
   overflow: auto;
   margin-top: 5px;
+  padding: 12px;
 `;

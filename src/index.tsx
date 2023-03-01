@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import App from "./App.js";
 import reportWebVitals from "./reportWebVitals";
 
-// import "style/global.scss";
 // import "style/antd.less";
 
 import "antd/dist/antd.css";
+import "style/global.scss";
 
 ReactDOM.render(
   <React.StrictMode>
