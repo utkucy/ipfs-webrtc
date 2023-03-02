@@ -17,6 +17,7 @@ import JoinRoom from "../../components/screens/dashboard/join-room/joinRoom";
 import { User } from "../../models/user";
 import { store } from "store";
 import { Room } from "models/room";
+import { antLoaderIcon } from "App";
 
 const { Text, Title } = Typography;
 const { Header, Footer, Sider, Content } = Layout;
@@ -107,8 +108,13 @@ class DashboardScreen extends React.Component {
   render() {
     if (this.user === undefined || this.time === undefined) {
       return (
-        <SpinnerContainer>
-          <Spin tip="Loading..." size="large" />
+        <SpinnerContainer style={{ color: "rgb(109 40 217)" }}>
+          <Spin
+            style={{ color: "rgb(109 40 217)" }}
+            tip="Loading..."
+            size="large"
+            indicator={antLoaderIcon}
+          />
         </SpinnerContainer>
       );
     }

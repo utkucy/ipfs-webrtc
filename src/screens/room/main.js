@@ -49,6 +49,7 @@ import Video from "../../components/screens/room/video";
 import { User } from "../../models/user";
 import ScreenRecording from "../../components/screens/room/screen-record/screen_record";
 import { store } from "store/index.ts";
+import { antLoaderIcon } from "App.js";
 
 let electron;
 let desktop_capturer;
@@ -67,11 +68,11 @@ const { Text, Title } = Typography;
 const { Header, Content, Sider, Footer } = Layout;
 const { SubMenu } = Menu;
 
-const FOOTER_HEIGHT = store.isMobile ? "50px" : "80px";
+const FOOTER_HEIGHT = store.isMobile ? "80px" : "80px";
 
 @observer
 class RoomScreen extends React.Component {
-  @observable ICON_SIZE = store.isMobile ? 14 : 20;
+  @observable ICON_SIZE = store.isMobile ? 16 : 20;
 
   @observable socket = null;
   @observable localStream = null; // used to hold local stream object to avoid recreating the stream everytime a new offer comes
@@ -105,6 +106,7 @@ class RoomScreen extends React.Component {
   @observable records = [];
   @observable shareVisible = false;
   @observable isSharing = false;
+  @observable isLeaving = false;
 
   @observable showRoomInfoModalDialog = false;
   @observable status = "Please wait...";
@@ -552,6 +554,7 @@ class RoomScreen extends React.Component {
 
     try {
       this.isLoading = true;
+      this.isLeaving = true;
 
       this.socket.close();
       this.stopTracks(this.localStream);
@@ -917,9 +920,12 @@ class RoomScreen extends React.Component {
   get gridLayout() {
     if (this.videoCount === 1)
       return "grid grid-cols-1 grid-rows-1 h-full w-full";
-    else if (this.videoCount === 2)
-      return "grid grid-cols-2 grid-rows-1 h-full w-full";
-    else if (this.videoCount === 3)
+    else if (this.videoCount === 2) {
+      if (store.isMobile) return "grid grid-cols-1 grid-rows-2 h-full w-full";
+      else {
+        return "grid grid-cols-2 grid-rows-1 h-full w-full";
+      }
+    } else if (this.videoCount === 3)
       return "grid grid-cols-2 grid-rows-2 h-full w-full";
     else if (this.videoCount === 4)
       return "grid grid-cols-2 grid-rows-2 h-full w-full";
@@ -1043,8 +1049,13 @@ class RoomScreen extends React.Component {
   render() {
     if (this.isLoading) {
       return (
-        <SpinnerContainer>
-          <Spin tip="Joining Room..." size="large" />
+        <SpinnerContainer style={{ color: "rgb(109 40 217)" }}>
+          <Spin
+            style={{ color: "rgb(109 40 217)" }}
+            tip={this.isLeaving ? "Leaving Room..." : "Joining Room..."}
+            size="large"
+            indicator={antLoaderIcon}
+          />
         </SpinnerContainer>
       );
     }
@@ -1052,14 +1063,11 @@ class RoomScreen extends React.Component {
       <div style={{ color: "black", padding: 5 }}>{this.status}</div>
     );
     return (
-      <div
-        className={` ${
-          this.showDrawer ? "w-3/4" : "w-screen"
-        } h-screen flex flex-col`}
+      <Container
+        showDrawer={this.showDrawer}
+        className={`h-screen flex flex-col`}
       >
-        <VideoContainer
-          className={`w-full grid ${this.gridLayout} bg-yellow-400`}
-        >
+        <VideoContainer className={`w-full grid ${this.gridLayout}`}>
           <div
             style={{ position: "relative" }}
             onDoubleClick={this.doubleClick}
@@ -1163,7 +1171,13 @@ class RoomScreen extends React.Component {
 
           <Tooltip
             placement="topLeft"
-            title={this.is_camera_open ? "Close Camera" : "Open Camera"}
+            title={
+              store.isMobile
+                ? null
+                : this.is_camera_open
+                ? "Close Camera"
+                : "Open Camera"
+            }
             trigger="hover"
             overlayClassName="tooltip-style"
           >
@@ -1184,7 +1198,11 @@ class RoomScreen extends React.Component {
           <Tooltip
             placement="topLeft"
             title={
-              this.is_microphone_open ? "Close Microphone" : "Open Microphone"
+              store.isMobile
+                ? null
+                : this.is_microphone_open
+                ? "Close Microphone"
+                : "Open Microphone"
             }
             trigger="hover"
             overlayClassName="tooltip-style"
@@ -1210,7 +1228,13 @@ class RoomScreen extends React.Component {
 
           <Tooltip
             placement="topLeft"
-            title={this.showDrawer ? "Close Chat" : "Open Chat"}
+            title={
+              store.isMobile
+                ? null
+                : this.showDrawer
+                ? "Close Chat"
+                : "Open Chat"
+            }
             trigger="hover"
             overlayClassName="tooltip-style"
           >
@@ -1277,6 +1301,10 @@ class RoomScreen extends React.Component {
           onCancel={this.hideModal}
           okText="Yes"
           cancelText="No"
+          okButtonProps={{
+            style: { backgroundColor: "rgb(126 34 206)", border: 0 },
+          }}
+          className="rounded-lg"
         >
           {" "}
           Are you sure you want to leave the meeting?
@@ -1332,13 +1360,18 @@ class RoomScreen extends React.Component {
           showDrawer={this.showDrawer}
           changeModalVisibility={this.changeModalVisibility}
         />
-      </div>
+      </Container>
     );
   }
 }
 
+const Container = styled.div`
+  width: ${(props) =>
+    !!props.showDrawer ? "calc(100vw - 450px) !important" : "100vw !important"};
+`;
+
 const VideoContainer = styled.div`
-  height: calc(100vh - FOOTER_HEIGHT) !important;
+  height: calc(100vh - 80px) !important;
 `;
 
 const StyledPopover = styled(Popover)``;

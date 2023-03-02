@@ -87,7 +87,7 @@ class JoinRoom extends React.Component {
             destroyOnClose={true}
             width={"100%"}
           >
-            <div className="w-full h-full flex flex-col justify-center ">
+            <div className="w-full h-full flex flex-col mt-5">
               <Form
                 layout="vertical"
                 className="w-full flex flex-col justify-center"
@@ -98,6 +98,7 @@ class JoinRoom extends React.Component {
                       <Input
                         // value={this.newProduct.name}
                         onChange={this.onRoomIdChange}
+                        style={{ fontSize: 16 }}
                       />
                     </Form.Item>
                   </Col>
@@ -108,6 +109,7 @@ class JoinRoom extends React.Component {
                       <Input
                         // value={this.newProduct.description}
                         onChange={this.onPasswordChange}
+                        style={{ fontSize: 16 }}
                       />
                     </Form.Item>
                   </Col>

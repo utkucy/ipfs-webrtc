@@ -16,6 +16,14 @@ import { User } from "./models/user";
 import { create } from "ipfs";
 import { store } from "store";
 import styled from "styled-components";
+import { LoadingOutlined } from "@ant-design/icons";
+
+export const antLoaderIcon = (
+  <LoadingOutlined
+    style={{ fontSize: 24, color: "rgb(109 40 217)", marginBottom: 8 }}
+    spin
+  />
+);
 
 @observer
 class App extends React.Component {
@@ -53,8 +61,13 @@ class App extends React.Component {
   render() {
     if (!store.databaseStore.isOnline) {
       return (
-        <SpinnerContainer>
-          <Spin tip="Loading..." size="large" />
+        <SpinnerContainer style={{ color: "rgb(109 40 217)" }}>
+          <Spin
+            style={{ color: "rgb(109 40 217)" }}
+            tip="Loading..."
+            size="large"
+            indicator={antLoaderIcon}
+          />
         </SpinnerContainer>
       );
     }

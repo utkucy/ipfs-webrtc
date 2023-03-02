@@ -26,7 +26,7 @@ class DrawerComponent extends React.Component {
         onClose={this.props.changeModalVisibility}
         visible={this.props.showDrawer}
         mask={false}
-        width={store.isMobile ? "100%" : "75%"}
+        width={store.isMobile ? "100%" : "450px"}
         className="drawer-style"
       >
         <Messages room_id={this.props.room_id} user={this.props.user} />

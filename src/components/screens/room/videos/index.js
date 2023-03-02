@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { action, observable, computed, toJS } from "mobx";
 
 import Video from "../video";
+import { store } from "store";
 
 @observer
 class Videos extends Component {
@@ -28,6 +29,13 @@ class Videos extends Component {
                 height: "100%",
               }}
               key={index}
+              className={`${
+                store.isMobile &&
+                this.props.remoteStreams.length === 2 &&
+                index === 1
+                  ? "col-span-full"
+                  : ""
+              }`}
             >
               {(_videoTrack && (
                 <Video

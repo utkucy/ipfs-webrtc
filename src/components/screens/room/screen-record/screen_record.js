@@ -7,6 +7,7 @@ import { action, observable, computed, toJS } from "mobx";
 import Video from "../../room/video/index";
 import minimist from "minimist";
 import { Web3Storage, getFilesFromPath } from "web3.storage";
+import { antLoaderIcon } from "App";
 
 const { Text } = Typography;
 let recorder;
@@ -369,6 +370,8 @@ class ScreenRecording extends React.Component {
           <Spin
             tip="Your record file is uploading to web3.storage..."
             size="large"
+            style={{ color: "rgb(109 40 217)" }}
+            indicator={antLoaderIcon}
           />
         </RecordLoader>
       );

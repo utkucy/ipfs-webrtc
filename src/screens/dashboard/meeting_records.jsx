@@ -31,6 +31,7 @@ import moment from "moment";
 
 import { MeetingRecord, Participant } from "../../models/meetingRecord";
 import { store } from "store";
+import { antLoaderIcon } from "App";
 
 const { Text, Title } = Typography;
 const { Column, ColumnGroup } = Table;
@@ -152,8 +153,13 @@ class MeetingRecordsScreen extends React.Component {
   render() {
     if (!this.is_fetch_complete) {
       return (
-        <SpinnerContainer>
-          <Spin tip="Loading..." size="large" />
+        <SpinnerContainer style={{ color: "rgb(109 40 217)" }}>
+          <Spin
+            style={{ color: "rgb(109 40 217)" }}
+            tip="Loading..."
+            size="large"
+            indicator={antLoaderIcon}
+          />
         </SpinnerContainer>
       );
     }

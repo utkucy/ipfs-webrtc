@@ -29,6 +29,7 @@ import { User } from "../../models/user";
 
 import UserImage from "../../assets/images/user.png";
 import { store } from "store";
+import { antLoaderIcon } from "App";
 
 const { Text, Title } = Typography;
 
@@ -67,8 +68,13 @@ class ContactsScreen extends React.Component {
   render() {
     if (!this.is_fetch_complete) {
       return (
-        <SpinnerContainer>
-          <Spin tip="Loading..." size="large" />
+        <SpinnerContainer style={{ color: "rgb(109 40 217)" }}>
+          <Spin
+            style={{ color: "rgb(109 40 217)" }}
+            tip="Loading..."
+            size="large"
+            indicator={antLoaderIcon}
+          />
         </SpinnerContainer>
       );
     }

@@ -8,6 +8,8 @@ import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.css";
 import "style/global.scss";
 
+import "@fontsource/montserrat"; // Defaults to weight 400.
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

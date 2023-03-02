@@ -6,7 +6,6 @@ import {
   Form,
   Input,
   Button,
-  Checkbox,
   Typography,
   notification,
   TouchableOpacity,

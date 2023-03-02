@@ -9,7 +9,6 @@ import {
   Divider,
   Row,
   Col,
-  Checkbox,
   Select,
   Tooltip,
   message,
@@ -27,6 +26,8 @@ import Video from "../../components/screens/room/video";
 import { User } from "../../models/user";
 import { Settings } from "../../models/settings";
 import { store } from "store";
+import { StyledCheckbox } from "screens/login/main";
+import { antLoaderIcon } from "App";
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -204,8 +205,13 @@ class SettingsScreen extends React.Component {
   render() {
     if (!this.is_fetch_complete) {
       return (
-        <SpinnerContainer>
-          <Spin tip="Loading..." size="large" />
+        <SpinnerContainer style={{ color: "rgb(109 40 217)" }}>
+          <Spin
+            style={{ color: "rgb(109 40 217)" }}
+            tip="Loading..."
+            size="large"
+            indicator={antLoaderIcon}
+          />
         </SpinnerContainer>
       );
     }
@@ -239,35 +245,41 @@ class SettingsScreen extends React.Component {
           )}
         </div>
         <SettingsContainer
-          style={{ overflow: "auto", scrollBehavior: "smooth" }}
+          style={{
+            overflowY: "hidden",
+            overflowY: "auto",
+            scrollBehavior: "smooth",
+            paddingRight: 8,
+            scrollbarWidth: 1,
+          }}
         >
-          <Row style={{ paddingTop: 16, paddingBottom: 16 }} gutter={48}>
+          <Row style={{ paddingTop: 16, paddingBottom: 16 }}>
             <Col
               style={{ display: "flex", flexDirection: "column" }}
               span={this.isMobile ? 24 : 12}
             >
               <Divider orientation="left">General</Divider>
-              <Checkbox
+              <StyledCheckbox
                 style={{ marginBottom: 16 }}
                 checked={this.settings.confirm_leave_meeting}
                 onChange={(e) => this.onConfirmLeaveMeetingChange(e)}
               >
                 Ask me to confirm when I leave meeting
-              </Checkbox>
-              <Checkbox
+              </StyledCheckbox>
+              <StyledCheckbox
                 style={{ marginLeft: 0, marginBottom: 16 }}
                 checked={this.settings.copy_invite_link}
                 onChange={(e) => this.onCopyInviteLinkChange(e)}
               >
                 Copy invite link when starting a new meeting
-              </Checkbox>
-              <Checkbox
+              </StyledCheckbox>
+              <StyledCheckbox
                 style={{ marginLeft: 0 }}
                 checked={this.settings.show_meeting_duration}
                 onChange={(e) => this.onShowMeetingDurationChange(e)}
               >
                 Show my meeting duration
-              </Checkbox>
+              </StyledCheckbox>
             </Col>
             <Col
               style={{ display: "flex", flexDirection: "column" }}
@@ -284,12 +296,12 @@ class SettingsScreen extends React.Component {
           <Row style={{ marginTop: 20, paddingBottom: 16 }}>
             <Col span={24} style={{}}>
               <Divider orientation="left">Media Devices</Divider>
-              <Checkbox
+              <StyledCheckbox
                 checked={this.settings.turn_of_media_devices}
                 onChange={(e) => this.onTurnOffMediaDevicesChange(e)}
               >
                 Turn of my media devices when joining a meeting
-              </Checkbox>
+              </StyledCheckbox>
               <div className={` w-full mt-12 flex mobile:flex-col `}>
                 <VideoContainer>
                   <Video
@@ -333,6 +345,7 @@ class SettingsScreen extends React.Component {
                         style={{ width: "100%" }}
                         onClick={() => this.dropDownClick("video")}
                         onChange={(value) => this.handleCameraChange(value)}
+                        disabled={!!store.isMobile}
                       >
                         {this.videoDevices.length &&
                           this.videoDevices.map((videoDevice, index) => (
@@ -363,6 +376,7 @@ class SettingsScreen extends React.Component {
                         style={{ width: "100%" }}
                         onClick={() => this.dropDownClick("mic")}
                         onChange={(value) => this.handleMicrophoneChange(value)}
+                        disabled={!!store.isMobile}
                       >
                         {this.microphoneDevices.length &&
                           this.microphoneDevices.map(
@@ -398,6 +412,7 @@ class SettingsScreen extends React.Component {
                         style={{ width: "100%" }}
                         onClick={() => this.dropDownClick("speaker")}
                         onChange={(value) => this.handleSpeakerChange(value)}
+                        disabled={!!store.isMobile}
                       >
                         {this.speakerDevices.length &&
                           this.speakerDevices.map((speakerDevice, index) => (
@@ -467,6 +482,14 @@ const SettingsContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+  ::-webkit-scrollbar-track {
+  }
+  ::-webkit-scrollbar-thumb {
+  }
 `;
 
 const VideoContainer = styled.div`
@@ -477,7 +500,7 @@ const VideoContainer = styled.div`
 
 const StyleContainer = styled.div`
   display: flex;
-  width: 60%;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   /* justify-content: space-between; */
