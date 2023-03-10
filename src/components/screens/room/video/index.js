@@ -146,7 +146,7 @@ class Video extends Component {
             this.video = ref;
           }}
           webkit-playsinline="true"
-          playsinline="true"
+          playsInline="true"
         ></video>
         <Text
           style={{

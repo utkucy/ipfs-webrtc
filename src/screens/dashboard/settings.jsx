@@ -49,7 +49,7 @@ class SettingsScreen extends React.Component {
     await this.getLocalStream();
     // console.log(this.props.user);
     // console.log(this.settings);
-    this.fetchSettings();
+    await this.fetchSettings();
     this.is_fetch_complete = true;
   }
 
@@ -97,7 +97,6 @@ class SettingsScreen extends React.Component {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
-        options: { mirror: true },
       });
       window.localStream = stream;
       this.localStream = stream;

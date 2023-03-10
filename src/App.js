@@ -9,6 +9,7 @@ import RegisterScreen from "./screens/register/main";
 import ForgotPasswordScreen from "./screens/forgotPassword/main";
 import DashboardScreen from "./screens/dashboard/index";
 import MeetingRecordsScreen from "./screens/dashboard/meeting_records";
+import PrivacyPolicyScreen from "screens/privacy-policy";
 import Room from "./screens/room/main";
 import { Spin } from "antd";
 
@@ -76,16 +77,10 @@ class App extends React.Component {
       <HashRouter>
         <Switch>
           <Route
-            path="/"
-            exact
-            render={(props) => (
-              <LoginScreen
-                {...props}
-                user={this.user}
-                changeUser={this.changeUser}
-              />
-            )}
+            path="/privacy-policy"
+            render={(props) => <PrivacyPolicyScreen {...props} />}
           />
+
           <Route
             path="/register"
             render={(props) => (
@@ -96,6 +91,7 @@ class App extends React.Component {
               />
             )}
           />
+
           <Route
             path="/forgot_password"
             render={(props) => <ForgotPasswordScreen {...props} />}
@@ -105,6 +101,17 @@ class App extends React.Component {
             render={(props) => <DashboardScreen {...props} user={this.user} />}
           />
           <Route path="/room/:roomID/:password" component={Room} />
+          <Route
+            path="/"
+            exact
+            render={(props) => (
+              <LoginScreen
+                {...props}
+                user={this.user}
+                changeUser={this.changeUser}
+              />
+            )}
+          />
         </Switch>
       </HashRouter>
     );

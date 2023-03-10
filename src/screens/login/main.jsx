@@ -76,6 +76,10 @@ class LoginScreen extends React.Component {
         });
     }
 
+    if (window.location.pathname.includes("privacy-policy")) {
+      this.props.history.push("/privacy-policy");
+    }
+
     if (
       cookies.get("_id") &&
       cookies.get("displayName") &&

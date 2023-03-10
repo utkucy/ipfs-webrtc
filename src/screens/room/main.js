@@ -109,12 +109,17 @@ class RoomScreen extends React.Component {
   @observable isLeaving = false;
 
   @observable showRoomInfoModalDialog = false;
-  @observable status = "Please wait...";
 
   @observable pc_config = {
     iceServers: [
       {
         urls: "stun:relay.metered.ca:80",
+      },
+      {
+        urls: "stun:stun.l.google.com:19302",
+      },
+      {
+        urls: "stun:global.stun.twilio.com:3478",
       },
       {
         urls: "turn:relay.metered.ca:80",
@@ -200,20 +205,9 @@ class RoomScreen extends React.Component {
 
     this.socket.on("connection-success", (data) => {
       this.getLocalStream();
-      // console.log(data.success)
-      const status =
-        data.peerCount > 1
-          ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-          : "Waiting for other peers to connect";
-      this.status = status;
     });
 
-    this.socket.on("joined-peers", (data) => {
-      this.status =
-        data.peerCount > 1
-          ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-          : "Waiting for other peers to connect";
-    });
+    this.socket.on("joined-peers", (data) => {});
 
     this.socket.on("online-peer", async (socketID) => {
       // console.log('connected peers ...', socketID)
@@ -281,10 +275,6 @@ class RoomScreen extends React.Component {
         );
 
         this.remoteStreams = remoteStreams;
-        this.status =
-          data.peerCount > 1
-            ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-            : "Waiting for other peers to connect";
       } catch (error) {
         console.log("peer-disconnected", error);
       }
@@ -1059,9 +1049,7 @@ class RoomScreen extends React.Component {
         </SpinnerContainer>
       );
     }
-    const statusText = (
-      <div style={{ color: "black", padding: 5 }}>{this.status}</div>
-    );
+
     return (
       <Container
         showDrawer={this.showDrawer}
