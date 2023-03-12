@@ -105,6 +105,20 @@ class DashboardScreen extends React.Component {
     }
   }
 
+  @computed
+  get greetingsText() {
+    if (store.isMobile) {
+      return (
+        <>
+          <div>Hi,</div>
+          <div>{this.user.displayName}</div>
+        </>
+      );
+    } else {
+      return `Hi, ${this.user.displayName}!`;
+    }
+  }
+
   render() {
     if (this.user === undefined || this.time === undefined) {
       return (
@@ -129,7 +143,7 @@ class DashboardScreen extends React.Component {
               ellipsis={{ tooltip: this.user.displayName }}
               className="text-purple-900 text-3xl mobile:text-4xl mobile:font-bold "
             >
-              Hi, {this.user.displayName}!
+              {this.greetingsText}
             </Text>
             {/* <Text type="secondary">Meeting Notes</Text> */}
           </div>

@@ -321,108 +321,112 @@ class SettingsScreen extends React.Component {
                     autoPlay
                   />
                 </VideoContainer>
-                <div className="flex flex-1 w-full flex-start ml-8 mobile:ml-0 mobile:mt-5">
-                  <StyleContainer>
-                    <OptionContainer>
-                      <OptionTextContainer>
-                        <VideoCameraOutlined
-                          style={{
-                            height: 20,
-                            fontSize: 20,
-                            color: "grey",
-                            marginRight: 12,
-                          }}
-                        />
-                        <Text>Camera</Text>
-                      </OptionTextContainer>
-                      <Select
-                        defaultValue={
-                          this.videoDevices.length
-                            ? this.videoDevices[0].label
-                            : "Camera source not found"
-                        }
-                        style={{ width: "100%" }}
-                        onClick={() => this.dropDownClick("video")}
-                        onChange={(value) => this.handleCameraChange(value)}
-                        disabled={!!store.isMobile}
-                      >
-                        {this.videoDevices.length &&
-                          this.videoDevices.map((videoDevice, index) => (
-                            <Option key={index} value={videoDevice.label}>
-                              {videoDevice.label}
-                            </Option>
-                          ))}
-                      </Select>
-                    </OptionContainer>
-                    <OptionContainer>
-                      <OptionTextContainer>
-                        <AudioOutlined
-                          style={{
-                            height: 20,
-                            fontSize: 20,
-                            color: "grey",
-                            marginRight: 12,
-                          }}
-                        />
-                        <Text>Microphone</Text>
-                      </OptionTextContainer>
-                      <Select
-                        defaultValue={
-                          this.microphoneDevices.length
-                            ? this.microphoneDevices[0].label
-                            : "Microphone source not found"
-                        }
-                        style={{ width: "100%" }}
-                        onClick={() => this.dropDownClick("mic")}
-                        onChange={(value) => this.handleMicrophoneChange(value)}
-                        disabled={!!store.isMobile}
-                      >
-                        {this.microphoneDevices.length &&
-                          this.microphoneDevices.map(
-                            (microphoneDevice, index) => (
-                              <Option
-                                key={index}
-                                value={microphoneDevice.label}
-                              >
-                                {microphoneDevice.label}
+                {!store.isMobile && (
+                  <div className="flex flex-1 w-full flex-start ml-8 mobile:ml-0 mobile:mt-5">
+                    <StyleContainer>
+                      <OptionContainer>
+                        <OptionTextContainer>
+                          <VideoCameraOutlined
+                            style={{
+                              height: 20,
+                              fontSize: 20,
+                              color: "grey",
+                              marginRight: 12,
+                            }}
+                          />
+                          <Text>Camera</Text>
+                        </OptionTextContainer>
+                        <Select
+                          defaultValue={
+                            this.videoDevices.length
+                              ? this.videoDevices[0].label
+                              : "Camera source not found"
+                          }
+                          style={{ width: "100%" }}
+                          onClick={() => this.dropDownClick("video")}
+                          onChange={(value) => this.handleCameraChange(value)}
+                          disabled={!!store.isMobile}
+                        >
+                          {this.videoDevices.length &&
+                            this.videoDevices.map((videoDevice, index) => (
+                              <Option key={index} value={videoDevice.label}>
+                                {videoDevice.label}
                               </Option>
-                            )
-                          )}
-                      </Select>
-                    </OptionContainer>
-                    <OptionContainer>
-                      <OptionTextContainer>
-                        <SoundOutlined
-                          style={{
-                            height: 20,
-                            fontSize: 20,
-                            color: "grey",
-                            marginRight: 12,
-                          }}
-                        />
-                        <Text>Speaker</Text>
-                      </OptionTextContainer>
-                      <Select
-                        defaultValue={
-                          this.speakerDevices.length
-                            ? this.speakerDevices[0].label
-                            : "Speaker source not found"
-                        }
-                        style={{ width: "100%" }}
-                        onClick={() => this.dropDownClick("speaker")}
-                        onChange={(value) => this.handleSpeakerChange(value)}
-                        disabled={!!store.isMobile}
-                      >
-                        {this.speakerDevices.length &&
-                          this.speakerDevices.map((speakerDevice, index) => (
-                            <Option key={index} value={speakerDevice.label}>
-                              {speakerDevice.label}
-                            </Option>
-                          ))}
-                      </Select>
-                    </OptionContainer>
-                  </StyleContainer>
-                </div>
+                            ))}
+                        </Select>
+                      </OptionContainer>
+                      <OptionContainer>
+                        <OptionTextContainer>
+                          <AudioOutlined
+                            style={{
+                              height: 20,
+                              fontSize: 20,
+                              color: "grey",
+                              marginRight: 12,
+                            }}
+                          />
+                          <Text>Microphone</Text>
+                        </OptionTextContainer>
+                        <Select
+                          defaultValue={
+                            this.microphoneDevices.length
+                              ? this.microphoneDevices[0].label
+                              : "Microphone source not found"
+                          }
+                          style={{ width: "100%" }}
+                          onClick={() => this.dropDownClick("mic")}
+                          onChange={(value) =>
+                            this.handleMicrophoneChange(value)
+                          }
+                          disabled={!!store.isMobile}
+                        >
+                          {this.microphoneDevices.length &&
+                            this.microphoneDevices.map(
+                              (microphoneDevice, index) => (
+                                <Option
+                                  key={index}
+                                  value={microphoneDevice.label}
+                                >
+                                  {microphoneDevice.label}
+                                </Option>
+                              )
+                            )}
+                        </Select>
+                      </OptionContainer>
+                      <OptionContainer>
+                        <OptionTextContainer>
+                          <SoundOutlined
+                            style={{
+                              height: 20,
+                              fontSize: 20,
+                              color: "grey",
+                              marginRight: 12,
+                            }}
+                          />
+                          <Text>Speaker</Text>
+                        </OptionTextContainer>
+                        <Select
+                          defaultValue={
+                            this.speakerDevices.length
+                              ? this.speakerDevices[0].label
+                              : "Speaker source not found"
+                          }
+                          style={{ width: "100%" }}
+                          onClick={() => this.dropDownClick("speaker")}
+                          onChange={(value) => this.handleSpeakerChange(value)}
+                          disabled={!!store.isMobile}
+                        >
+                          {this.speakerDevices.length &&
+                            this.speakerDevices.map((speakerDevice, index) => (
+                              <Option key={index} value={speakerDevice.label}>
+                                {speakerDevice.label}
+                              </Option>
+                            ))}
+                        </Select>
+                      </OptionContainer>
+                    </StyleContainer>
+                  </div>
+                )}
               </div>
             </Col>
           </Row>

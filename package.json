@@ -98,6 +98,7 @@
     "sass": "^1.54.9",
     "sass-loader": "^12.3.0",
     "semver": "^7.3.5",
+    "simple-peer": "^9.11.1",
     "socket.io-client": "3.0.3",
     "source-map-loader": "^3.0.0",
     "stream-browserify": "^3.0.0",

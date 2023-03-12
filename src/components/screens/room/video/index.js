@@ -118,6 +118,7 @@ class Video extends Component {
   }
 
   render() {
+    const { alignCenter } = this.props;
     return (
       <div
         style={{
@@ -126,6 +127,8 @@ class Video extends Component {
           height: "100%",
           backgroundColor: "black",
           position: "relative",
+          display: alignCenter ? "flex" : "",
+          justifyContent: alignCenter ? "center" : "",
         }}
         onDoubleClick={this.makeFullScreen}
       >
@@ -140,6 +143,7 @@ class Video extends Component {
             width: "100%",
             height: "100%",
             backgroundColor: "black",
+            maxWidth: alignCenter ? "650px" : "",
           }}
           // ref={ this.props.videoRef }
           ref={(ref) => {
@@ -159,6 +163,7 @@ class Video extends Component {
         >
           {this.props.name ? this.props.name : " "}
         </Text>
+
         {/* {!this.videoVisible && <div style={{ width:'100%', height:'100%', backgroundColor: 'black' }} />} */}
       </div>
     );

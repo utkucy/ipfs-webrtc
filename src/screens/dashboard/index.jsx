@@ -314,7 +314,7 @@ class DashboardScreen extends React.Component {
             mobile:mb-0 
              `}
               onClick={() =>
-                item.onClick ? item.onClick : this.changeSelectedIndex(index)
+                item.onClick ? item.onClick() : this.changeSelectedIndex(index)
               }
             >
               {item.icon}

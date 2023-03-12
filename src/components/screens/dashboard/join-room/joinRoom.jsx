@@ -12,11 +12,13 @@ class JoinRoom extends React.Component {
   @observable room_id = null;
   @observable password = null;
   @observable user = this.props.user;
+  @observable isPending = false;
 
   @action.bound
   async onOk() {
     // this.props.changeModalVisibility()
     // this.props.history.push(`/room/${this.room_id}/${this.password}`)
+    this.isPending = true;
 
     if (this.room_id !== null && this.password !== null)
       try {
@@ -27,6 +29,7 @@ class JoinRoom extends React.Component {
               room.current_participants &&
               room.current_participants.length === 4
             ) {
+              this.isPending = false;
               return message.warning("Room is full");
             }
 
@@ -48,15 +51,21 @@ class JoinRoom extends React.Component {
             this.props.changeModalVisibility();
             this.props.history.push(`/room/${this.room_id}/${this.password}`);
           } else {
+            this.isPending = false;
             return message.error("Wrong password!");
           }
         } else {
+          this.isPending = false;
           return message.error("We could not find any Room with given Room ID");
         }
       } catch (error) {
+        this.isPending = false;
         console.log(error);
       }
-    else return message.warning("Please enter Room ID and Password");
+    else {
+      this.isPending = false;
+      return message.warning("Please enter Room ID and Password");
+    }
   }
 
   @action.bound
@@ -118,9 +127,11 @@ class JoinRoom extends React.Component {
 
               <div
                 onClick={this.onOk}
-                className="flex cursor-pointer justify-center items-center mt-5 w-full p-4 rounded bg-purple-700 text-purple-50"
+                className={`flex cursor-pointer justify-center items-center mt-5 w-full p-4 rounded bg-purple-700 text-purple-50 ${
+                  this.isPending ? "bg-purple-500" : ""
+                } `}
               >
-                Join
+                {this.isPending ? "Joining..." : "Join"}
               </div>
             </div>
           </Drawer>
@@ -133,6 +144,10 @@ class JoinRoom extends React.Component {
             onOk={this.onOk}
             onCancel={this.handleCancel}
             // style={{ height: '200px' }}
+            okButtonProps={{
+              style: { backgroundColor: "rgb(88 28 135)", border: "none" },
+              loading: this.isPending,
+            }}
             bodyStyle={{ paddingTop: 40, paddingBottom: 40, height: 220 }}
             destroyOnClose={true}
           >

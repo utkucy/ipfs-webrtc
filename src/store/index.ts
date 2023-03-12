@@ -20,7 +20,7 @@ export default class AppStore {
   constructor() {
     this.databaseStore = new DatabaseStore();
     this.userStore = new UserStore();
-    this.isMobile = window.innerWidth < 768;
+    this.isMobile = window.innerWidth < 1000;
   }
 }
 

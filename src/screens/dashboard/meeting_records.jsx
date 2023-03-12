@@ -177,26 +177,28 @@ class MeetingRecordsScreen extends React.Component {
           className={`w-full ${
             store.isMobile ? "flex overflow-y-hidden" : "block mt-10 h-full "
           }  `}
-          style={{ height: store.isMobile ? "90%" : "" }}
+          style={{ height: store.isMobile ? "85%" : "" }}
         >
           {!store.isMobile ? (
             <Table columns={this.columns} dataSource={this.meeting_records} />
           ) : (
-            <div className="h-full w-full mt-5 flex flex-col gap-4 pr-5 overflow-y-auto ">
+            <div className="h-full w-full mt-5 flex flex-col gap-4 pr-5 pb-6 overflow-y-auto ">
               {this.meeting_records.map((record, index) => (
                 <div
                   key={index}
-                  className="flex w-full p-5 rounded bg-purple-200 text-purple-900 justify-between items-center gap-4 "
+                  className="flex flex-col w-full p-5 rounded bg-purple-900 text-purple-200 justify-between items-start gap-4 "
                 >
                   <div className="flex flex-col gap:3">
-                    <div className="font-bold">{record.host_displayName}</div>
+                    <div className="font-extrabold">
+                      Hosted by: {record.host_displayName}
+                    </div>
                     <div>{record.date}</div>
                   </div>
                   <div
                     className="font-bold cursor-pointer"
                     onClick={() => this.showParticipantModal(record)}
                   >
-                    Show Participants
+                    Show Participants ({record.participant_list.length})
                   </div>
                 </div>
               ))}

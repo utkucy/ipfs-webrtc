@@ -30,9 +30,7 @@ class Videos extends Component {
               }}
               key={index}
               className={`${
-                store.isMobile &&
-                this.props.remoteStreams.length === 2 &&
-                index === 1
+                this.props.remoteStreams.length === 2 && index === 1
                   ? "col-span-full"
                   : ""
               }`}
@@ -60,6 +58,9 @@ class Videos extends Component {
                     width: "100%",
                   }}
                   // autoPlay
+                  alignCenter={
+                    this.props.remoteStreams.length === 2 && index === 1
+                  }
                 />
               )) || <div></div>}
               {/* { <h1>{rVideo.name}</h1> } */}
