@@ -10,26 +10,61 @@ Authentication processes (register - login), creating and retrieving room data (
 **Transmitting Media Source Operations** <br />
 Establishing connection between peers in the rooms with both voice (source: microphone) and video (source: camera, screen share) sources.
 
-Demo app can be found on the https://jade-sunburst-1968ce.netlify.app/
+Web app can be found on the https://web3rtc.com/
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+1. Features
+2. Requirements
+3. Installation
+4. Usage
+5. Contributing
+6. License
 
-### `yarn start`
+### Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. IPFS will be used for all data management process
+2. Authentication process will be added as Login and Register cases with OrbitDB.
+3. Ability to Create a room
+4. Ability to Join a room
+5. Ability to Chat with others in the room
+6. Ability to Share voice and camera source
+7. Ability to Change media sources
+8. Ability to Add other users to the contact list
+9. Ability to List Past Meetings
+10. Ability to List Contact List
+11. Ability to Manage App Settings, are common dashboard usages for all apps.
+12. Upload recorded meeting to Web3Storage
+13. Sing-in option with Metamask
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Requirements
 
-### `yarn build`
+* Node.js (version 14 or higher)
+* NPM (version 6 or higher)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone this repository
+2. Install dependencies: `yarn install`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Usage
+
+1. Start the app: `yarn start`
+2. Open your browser and navigate to http://localhost:3000
+3. Register an account and login with the registered account
+4. Create a Room or Join a Room
+5. Start communicating with others instantly!
+
+## Contributing
+
+Contributions are welcome and appreciated. To contribute, please follow these steps:
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature-branch`
+3. Make your changes and commit them: `this commit -m "Add new feature"`
+4. Push to the branch `git push origin feature-branch`
+5. Create a pull request
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 License. See the LICENSE file for more details.
