@@ -235,7 +235,22 @@ class RoomScreen extends React.Component {
         data.socketID,
         this.user.displayName
       );
-      pc.addStream(this.localStream);
+
+      this.localStream.getTracks().forEach((track) => {
+        const senders = pc.getSenders();
+        if (!!senders.length) {
+          senders
+            .find(
+              (sender) =>
+                sender.track.kind === track.kind && sender.track.id === track.id
+            )
+            .replaceTrack(track);
+        } else {
+          pc.addTrack(track, this.localStream);
+        }
+      });
+
+      // pc.addStream(this.localStream);
 
       pc.setRemoteDescription(new RTCSessionDescription(data.sdp)).then(() => {
         // 2. Create Answer
@@ -953,7 +968,9 @@ class RoomScreen extends React.Component {
             this.microphoneDevices.map((md) => (
               <div
                 key={md.deviceId}
-                onClick={() => this.changeMicSource(md, false)}
+                onClick={() =>
+                  store.isMobile ? null : this.changeMicSource(md, false)
+                }
                 className="py-2 px-4 hover:bg-purple-800 hover:text-white cursor-pointer"
               >
                 {md.label}
@@ -972,7 +989,9 @@ class RoomScreen extends React.Component {
             this.speakerDevices.map((md) => (
               <div
                 key={md.deviceId}
-                onClick={() => this.changeSpeakerSource(md, false)}
+                onClick={() =>
+                  store.isMobile ? null : this.changeSpeakerSource(md, false)
+                }
                 className="py-2 px-4 hover:bg-purple-800 hover:text-white cursor-pointer"
               >
                 {md.label}
@@ -991,7 +1010,9 @@ class RoomScreen extends React.Component {
             this.videoDevices.map((md) => (
               <div
                 key={md.deviceId}
-                onClick={() => this.changeVideoSource(md, false)}
+                onClick={() =>
+                  store.isMobile ? null : this.changeVideoSource(md, false)
+                }
                 className="py-2 px-4 hover:bg-purple-800 hover:text-white cursor-pointer"
               >
                 {md.label}
@@ -1013,17 +1034,19 @@ class RoomScreen extends React.Component {
           <InfoCircleOutlined stlye={{ width: 64 }} />
           Show Room Info
         </div>
-        <StyledPopover
-          content={this.settingsPopoverContent}
-          trigger="hover"
-          overlayClassName="popover-style"
-          placement="right"
-        >
-          <div className="cursor-pointer flex gap-2 justify-start items-center py-2 px-4 hover:bg-purple-800 hover:text-white">
-            <SettingOutlined />
-            Settings
-          </div>
-        </StyledPopover>
+        {!store.isMobile && (
+          <StyledPopover
+            content={this.settingsPopoverContent}
+            trigger="hover"
+            overlayClassName="popover-style"
+            placement="right"
+          >
+            <div className="cursor-pointer flex gap-2 justify-start items-center py-2 px-4 hover:bg-purple-800 hover:text-white">
+              <SettingOutlined />
+              Settings
+            </div>
+          </StyledPopover>
+        )}
 
         <div
           className="cursor-pointer flex gap-2 justify-start items-center py-2 px-4 text-red-500 hover:bg-white"
