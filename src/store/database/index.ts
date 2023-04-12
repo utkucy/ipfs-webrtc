@@ -43,6 +43,13 @@ export default class DatabaseStore {
       },
     });
 
+    let _isOnline = false;
+    while (!_isOnline) {
+      if (ipfs.isOnline()) {
+        _isOnline = true;
+      }
+    }
+
     //set up orbitdb
     this.ipfs = ipfs;
 

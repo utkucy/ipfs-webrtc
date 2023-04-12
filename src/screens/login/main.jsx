@@ -125,15 +125,21 @@ class LoginScreen extends React.Component {
 
     try {
       const user = await store.userStore.login(this.email, this.password);
-      this.props.changeUser(user);
 
-      const cookies = new Cookies();
-      cookies.set("displayName", user.displayName);
-      cookies.set("_id", user._id);
-      cookies.set("rememberMe", this.isChecked);
-      this.props.history.push("/dashboard");
+      if (!user) {
+        message.error("User Not Found!");
+      } else {
+        this.props.changeUser(user);
+
+        const cookies = new Cookies();
+        cookies.set("displayName", user.displayName);
+        cookies.set("_id", user._id);
+        cookies.set("rememberMe", this.isChecked);
+        this.props.history.push("/dashboard");
+      }
     } catch (err) {
-      message.error("User Not Found!");
+      console.log(err);
+      message.error("Unable to login");
     }
   }
 

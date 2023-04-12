@@ -493,13 +493,20 @@ class RoomScreen extends React.Component {
           } else {
             // 3. if not, then create new stream and add track
             _remoteStream = new MediaStream();
-            _remoteStream.addTrack(e.track, _remoteStream);
+
+            if (e.track) _remoteStream.addTrack(e.track, _remoteStream);
+            else if (!!e.streams && e.streams.length > 0 && !!e.streams[0]) {
+              _remoteStream = new MediaStream(e.streams[0]);
+            }
+
+            console.log("on track event", e);
+            console.log("_remoteStream", _remoteStream);
 
             const remoteVideoOwner = this.current_participant_list.find(
               (cp) => cp.socketID === socketID
             );
 
-            console.log("remoteVideoOwner", remoteVideoOwner);
+            // console.log("remoteVideoOwner", remoteVideoOwner);
 
             remoteVideo = {
               id: socketID,
